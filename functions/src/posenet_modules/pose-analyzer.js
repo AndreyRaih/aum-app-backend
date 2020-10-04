@@ -27,6 +27,7 @@ function _findAngle (a, b, c) {
 
 async function getAsanaRules ({ name, block }) {
   const rules = await db.collection('asanas').doc(block).get().then(doc => doc.data());
+  console.log(rules, block, name);
   return rules ? rules[name] : { rules: [] };
 }
 
@@ -47,21 +48,19 @@ function _checkDiffByAngle (rule, pose) {
 }
 
 async function getAnalyzeModel (keypoints, asana) {
-  // const boundingBox = posenet.getBoundingBox(keypoints);
+  const boundingBox = posenet.getBoundingBox(keypoints);
   const { rules } = await getAsanaRules(asana);
-  // const poseResized = _resizePose(boundingBox, keypoints);
-  console.log(keypoints);
+  const poseResized = _resizePose(boundingBox, keypoints);
   const result = rules.map(rule => {
     return Object.assign({}, {
       chain: rule.line.join(', '),
-      result: _checkDiffByAngle(rule, keypoints),
-      keypoints
+      result: _checkDiffByAngle(rule, poseResized)
     }) 
   });
   return result;
 }
 
-exports.analyze = async (imgFromBucket) => {
+export const analyze = async (imgFromBucket) => {
   const attrs = imgFromBucket.split('/');
   const bucketName = attrs[2];
   const filename = attrs[attrs.length - 1];
@@ -72,9 +71,7 @@ exports.analyze = async (imgFromBucket) => {
     name: name.replace(' ', '_'),
     block: block.split('.')[0]
   }
-  console.log(asana);
   const userKeypoints = await getKeypoints({bucketName, imageGCS, imagePath});
-  console.log(userKeypoints);
   const result = await getAnalyzeModel(userKeypoints, asana);
   fs.unlinkSync(imagePath);
   return { name, block, result };
