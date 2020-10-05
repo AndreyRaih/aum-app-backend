@@ -16,14 +16,14 @@
 'use strict';
 
 import * as functions from 'firebase-functions';
-import { build_queue, get_result, analyse_img } from './handlers';
+import { build_queue, get_result, analyse_img, update_user_result } from './handlers';
 
 /**
  * Triggers by firestorage segments. Needs for a parse users images, build models,
  * which contain result of ts.poseNet, and patching exist model of user data
  */
 
-export const analyse_user_input = (file) => analyse_img(file);
+export const handle_user_asana_img_upload = (file) => analyse_img(file).then(result => update_user_result(result)).catch((err) => console.log(err));
 
 /**
  * API handlers for a plain http requests
@@ -34,6 +34,7 @@ export const get_asana_queue = functions.https.onRequest(async (req, res) => {
     const queue = await build_queue(req.query);
     res.status(200).json(queue);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
@@ -43,6 +44,7 @@ export const get_user_result = functions.https.onRequest(async (req, res) => {
     const result = await get_result();
     res.status(200).json(result);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
