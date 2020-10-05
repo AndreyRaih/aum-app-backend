@@ -16,6 +16,9 @@
 'use strict';
 
 import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
+admin.initializeApp()
+
 import { build_queue, get_result, analyse_img, update_user_result } from './handlers';
 
 /**

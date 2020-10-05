@@ -17,6 +17,6 @@ export class AumFirestorageRepository {
     }).then(() => tmpPath);
   }
   clearFilesTmp () {
-    this.tmpFilesPathList.forEach(path => fs.unlinkSync(path));
+    this.tmpFilesPathList.forEach(tmpPath => fs.unlinkSync(tmpPath));
   }
 }
