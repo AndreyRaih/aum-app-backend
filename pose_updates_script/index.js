@@ -9,7 +9,6 @@ const { asanas } = require('./asanas');
 
 exports.rules_deploy = functions.https.onRequest(async (request, response) => {
   for (let [doc, value] of Object.entries(asanas)) {
-    console.log(doc, value)
     await admin.firestore().collection('asanas').doc(doc).set(value);
   };
 });

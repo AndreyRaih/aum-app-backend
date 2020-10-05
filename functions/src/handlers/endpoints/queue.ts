@@ -2,8 +2,7 @@ import { AumFirebaseRepository } from '../../repositories/firebase';
 
 export const getAllQueueFromFirebase = async () => {
   const repository = new AumFirebaseRepository();
-  const result = await repository.getAllAsanas();
-  return result;
+  return repository.getAllAsanas();
 }
 
 export const buildPersonalQueue = (queue, params) => {
