@@ -1,13 +1,12 @@
 'use strict';
 // Module with pose estimation
-const { Storage } = require("@google-cloud/storage");
-const storage = new Storage();
+import { AumFirestorageRepository } from '../repositories/firestorage';
 // Tensorflow
-const tf = require('@tensorflow/tfjs-node');
-const posenet = require('@tensorflow-models/posenet');
+import tf from '@tensorflow/tfjs-node';
+import posenet from '@tensorflow-models/posenet';
 // Image and canvas
-const { Image } = require('canvas');
-const { createCanvas } = require('canvas');
+import { Image } from 'canvas';
+import { createCanvas } from 'canvas';
 
 async function estimatePose(imagePath) {
   const net = await posenet.load({
@@ -27,9 +26,10 @@ async function estimatePose(imagePath) {
   return raw.keypoints;
 } 
 
-exports.getKeypoints = async ({bucketName, imageGCS, imagePath}) => {
+export const getKeypoints = async ({bucketName, imageGCS, imagePath}) => {
+  const repository = new AumFirestorageRepository();
   try {
-    await storage.bucket(bucketName).file(imageGCS).download({ destination: imagePath });
+    await repository.getFile(bucketName, imageGCS, imagePath);
   } catch (err) {
     console.log(err.message);
     return new Error({ message: "File not found" });

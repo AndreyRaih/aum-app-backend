@@ -1,12 +1,12 @@
 'use strict';
 
-// Init firebase app
+import { analyze } from '../../posenet_modules/pose-analyzer';
+
 import * as admin from 'firebase-admin';
-import { analyze } from '../posenet_modules/pose-analyzer';
 admin.initializeApp()
 const db = admin.firestore();
 
-export const analyse_img = async (file) => {
+export const analyseImg = async (file) => {
   try {
     const updates = await analyze(`gs://${file.bucket}/${file.name}`);
     const resultRef = db.collection('results_test_compare').doc('result_test');

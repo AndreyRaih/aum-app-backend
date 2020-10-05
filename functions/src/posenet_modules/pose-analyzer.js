@@ -1,13 +1,13 @@
 'use strict';
 // Modules for pose analyzing
-const admin = require('firebase-admin');
+import admin from 'firebase-admin';
 const db = admin.firestore();
-const posenet = require('@tensorflow-models/posenet');
-const { getKeypoints } = require('./pose-estimation');
+import posenet from '@tensorflow-models/posenet';
+import { getKeypoints } from './pose-estimation';
 // FS utils
-const path = require('path');
-const os = require('os');
-const fs = require('fs');
+import path from 'path';
+import os from 'os';
+import fs from 'fs';
 
 function _resizePose(bBox, keypoints) {
   let newKeypoints = [].concat(keypoints);

@@ -13,6 +13,7 @@
     "src"
   ],
   "exclude": [
-    "lib"
+    "lib",
+    "node_modules"
   ]
 }
