@@ -1,28 +1,55 @@
-const lying_back_1 = {
-  right_twist: {
+const lying_back_1 = [
+  {
+    id: 'right_twist_lying_back_1',
     name: 'right twist',
+    adaptName: '',
+    block: 'lying_back_1',
     src: 'gs://',
+    audioSources: [
+      { voice: 'male', isShort: false, src: 'gs://' },
+      { voice: 'male', isShort: true, src: 'gs://' },
+      { voice: 'female', isShort: false, src: 'gs://' },
+      { voice: 'female', isShort: true, src: 'gs://' }
+    ],
     level: 1,
     isCheck: false
   },
-  left_twist: {
+  {
     name: 'left twist',
     src: 'gs://',
+    audioSources: [
+      { voice: 'male', isShort: false, src: 'gs://' },
+      { voice: 'male', isShort: true, src: 'gs://' },
+      { voice: 'female', isShort: false, src: 'gs://' },
+      { voice: 'female', isShort: true, src: 'gs://' }
+    ],
     level: 1,
     isCheck: false
   },
-  legs_pull: {
+  {
     name: 'legs pull',
     src: 'gs://',
+    audioSources: [
+      { voice: 'male', isShort: false, src: 'gs://' },
+      { voice: 'male', isShort: true, src: 'gs://' },
+      { voice: 'female', isShort: false, src: 'gs://' },
+      { voice: 'female', isShort: true, src: 'gs://' }
+    ],
     level: 1,
     isCheck: false
   },
-  bow_pose: {
+  {
     name: 'bow pose',
     src: 'gs://',
+    audioSources: [
+      { voice: 'male', isShort: false, src: 'gs://' },
+      { voice: 'male', isShort: true, src: 'gs://' },
+      { voice: 'female', isShort: false, src: 'gs://' },
+      { voice: 'female', isShort: true, src: 'gs://' }
+    ],
     level: 1,
     isCheck: true,
-    side: null,
+
     rules: [
       {
         line: ['knee', 'ankle', 'shoulder'],
@@ -36,7 +63,7 @@ const lying_back_1 = {
       }
     ]
   }
-}
+]
 
 const lying_back_2 = {
   ardha_navasana: {
@@ -62,7 +89,7 @@ const lying_back_2 = {
     src: 'gs://',
     level: 2,
     isCheck: true,
-    side: null,
+
     rules: [
       {
         line: ['ankle', 'hip', 'shoulder'],
@@ -102,7 +129,7 @@ const lying_forward_1 = {
     src: 'gs://',
     level: 1,
     isCheck: true,
-    side: null,
+
     rules: [
       {
         line: ['wrist', 'elbow', 'shoulder'],
@@ -141,7 +168,7 @@ const lying_forward_2 = {
     src: 'gs://',
     level: 2,
     isCheck: true,
-    side: null,
+
     rules: [
       {
         line: ['shoulder', 'wrist', 'knee'],
@@ -175,7 +202,7 @@ const sitting_1 = {
     src: 'gs://',
     level: 1,
     isCheck: true,
-    side: null,
+
     rules: [
       {
         line: ['ear', 'shoulder', 'hip'],
@@ -215,7 +242,7 @@ const sitting_2 = {
     src: 'gs://',
     level: 2,
     isCheck: true,
-    side: null,
+
     rules: [
       {
         line: ['ear', 'shoulder', 'hip'],
@@ -260,7 +287,6 @@ const balances_1 = {
     src: 'gs://',
     level: 1,
     isCheck: true,
-    side: 'right',
     rules: [
       {
         line: ['wrist', 'hip', 'ankle'],
@@ -305,7 +331,6 @@ const balances_2 = {
     src: 'gs://',
     level: 2,
     isCheck: true,
-    side: null,
     rules: [
       {
         line: ['rightAnkle', 'rightKnee', 'rightHip'],
@@ -350,7 +375,7 @@ const standing_1 = {
     src: 'gs://',
     level: 1,
     isCheck: true,
-    side: null,
+
     rules: [
       {
         line: ['leftAnkle', 'leftKnee', 'leftHip'],
@@ -401,7 +426,7 @@ const standing_2 = {
     src: 'gs://',
     level: 2,
     isCheck: true,
-    side: null,
+
     rules: [
       {
         line: ['rightWrist', 'rightShoulder', 'leftWrist'],

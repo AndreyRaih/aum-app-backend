@@ -4,7 +4,7 @@ import { getAllQueueFromFirebase, buildPersonalQueue } from './endpoints/queue';
 import { lastResult } from './endpoints/user';
 import { analyseImg, setAnalyseResultFromUserModel } from './storage';
 
-interface AumQueueSettings {
+export interface AumQueueSettings {
   time?: String,
   voice?: String,
   complexity?: String

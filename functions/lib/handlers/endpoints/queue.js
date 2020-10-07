@@ -4,8 +4,7 @@ exports.buildPersonalQueue = exports.getAllQueueFromFirebase = void 0;
 const firebase_1 = require("../../repositories/firebase");
 exports.getAllQueueFromFirebase = async () => {
     const repository = new firebase_1.AumFirebaseRepository();
-    const result = await repository.getAllAsanas();
-    return result;
+    return repository.getAllAsanas();
 };
 exports.buildPersonalQueue = (queue, params) => {
     return [];

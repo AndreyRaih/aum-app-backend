@@ -20,6 +20,7 @@ import * as admin from 'firebase-admin';
 admin.initializeApp()
 
 import { build_queue, get_result, analyse_img, update_user_result } from './handlers';
+import { AumFirebaseRepository } from './repositories/firebase';
 
 /**
  * Triggers by firestorage segments. Needs for a parse users images, build models,

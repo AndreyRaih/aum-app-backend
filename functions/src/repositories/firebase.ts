@@ -9,14 +9,13 @@ export class AumFirebaseRepository {
    * @description Public method 
    */
   async getAllAsanas () {
-    const source = await this.db.collection('asanas').get().then(snapshot => snapshot.docs); 
-    return this._covertAsanaQueueResponseToList(source);
+    return this.db.collection('asanas').get().then(snapshot => snapshot.docs.map(doc => ({block: doc.id, items: doc.data()}))); 
   }
   /**
    * @description Public method 
    */
   async getAsana ({ name, block }) {
-    return this.db.collection('asanas').doc(block).get().then(doc => doc.data()).then(data => data.name);
+    return this.db.collection('asanas').doc(block).get().then(doc => doc.data()[name]);
   }
   /**
    * @description Public method 
@@ -38,12 +37,4 @@ export class AumFirebaseRepository {
       await resultRef.update({ [`${updates.name}_${updates.block}`]: updates });
     }
   }
-  /**
-   * @description Private method 
-   */
-  private _covertAsanaQueueResponseToList = (response) => response
-      .map(doc => Object.values(doc.data())
-      .map((note: Object) => ({...note, block: doc.id}))
-      .reduce((full, block) => full.concat(Object.values(block)), []));
-
 }
