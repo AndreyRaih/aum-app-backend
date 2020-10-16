@@ -19,7 +19,7 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 admin.initializeApp()
 
-import { build_queue, get_result, analyse_img, update_user_result } from './handlers';
+import { build_queue, get_result, analyse_img, update_user_result, create_user_model, get_user_model } from './handlers';
 import { AumFirebaseRepository } from './repositories/firebase';
 
 /**
@@ -28,6 +28,12 @@ import { AumFirebaseRepository } from './repositories/firebase';
  */
 
 export const handle_user_asana_img_upload = (file) => analyse_img(file).then(result => update_user_result(result)).catch((err) => console.log(err));
+
+/**
+ * Other triggers;
+ */
+
+export const create_user = functions.auth.user().onCreate((user) => create_user_model(user));
 
 /**
  * API handlers for a plain http requests
@@ -46,6 +52,18 @@ export const get_asana_queue = functions.https.onRequest(async (req, res) => {
 export const get_user_result = functions.https.onRequest(async (req, res) => {
   try {
     const result = await get_result();
+    res.status(200).json(result);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+
+export const get_user = functions.https.onRequest(async (req, res) => {
+  try {
+    const { id } = req.query;
+    const result = await get_user_model(id);
     res.status(200).json(result);
   } catch (err) {
     console.log(err);

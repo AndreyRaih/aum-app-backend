@@ -1,7 +1,7 @@
 'use strict';
 
 import { getAllQueueFromFirebase, buildPersonalQueue } from './endpoints/queue';
-import { lastResult } from './endpoints/user';
+import { lastResult, createUserModel, getUserModel } from './endpoints/user';
 import { analyseImg, setAnalyseResultFromUserModel } from './storage';
 
 export interface AumQueueSettings {
@@ -20,4 +20,8 @@ export const build_queue = async (settings: AumQueueSettings) => {
   return queue;
 };
 
-export const get_result = async () => await lastResult();
+export const get_result = async () => lastResult();
+
+export const get_user_model = async (id) => getUserModel(id);
+
+export const create_user_model = async (data) => createUserModel(data);

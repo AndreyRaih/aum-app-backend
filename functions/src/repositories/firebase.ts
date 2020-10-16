@@ -37,4 +37,22 @@ export class AumFirebaseRepository {
       await resultRef.update({ [`${updates.name}_${updates.block}`]: updates });
     }
   }
+  /**
+   * @description Public method 
+   */
+  async setUserModel ({ id, data }) {
+    const resultRef = this.db.collection('users').doc(id);
+    const doc = await resultRef.get();
+    if (!doc.exists) {
+      return resultRef.set(data);
+    } else {
+      return new Error('User already exist!');
+    }
+  }
+  /**
+   * @description Public method 
+   */
+  async getUserModel (id) {
+    return this.db.collection('users').doc(id).get().then(snapshot => snapshot.data())
+  };
 }

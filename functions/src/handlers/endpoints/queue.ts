@@ -6,6 +6,6 @@ export const getAllQueueFromFirebase = async () => {
 }
 
 export const buildPersonalQueue = (queue, params) => {
-  const { time, voice, complexity } = params;
-  return queue.filter(block => );
+  // const { time, voice, complexity } = params;
+  return queue;
 }

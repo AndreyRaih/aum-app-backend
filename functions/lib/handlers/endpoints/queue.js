@@ -7,6 +7,7 @@ exports.getAllQueueFromFirebase = async () => {
     return repository.getAllAsanas();
 };
 exports.buildPersonalQueue = (queue, params) => {
-    return [];
+    // const { time, voice, complexity } = params;
+    return queue;
 };
 //# sourceMappingURL=queue.js.map

@@ -105,31 +105,51 @@ const lying_back_2 = {
   }
 }
 
-const lying_forward_1 = {
-  sphinx: {
-    name: 'sphinx pose',
-    src: 'gs://',
+const lying_forward_1 = [
+  {
+    id: 'balasana_lying_forward_1',
+    name: 'Balasana',
+    adaptName: 'Childs Pose',
+    block: 'lying_back_1',
+    src: 'gs://aum-app-videos/lying_forward_1/child_lying_forward_1.mp4',
+    audioSources: [
+      { voice: 'male', isShort: false, src: 'gs://aum-app-audio/balasana_lying_forward_1/male_full.mp3' },
+      { voice: 'male', isShort: true, src: 'gs://aum-app-audio/balasana_lying_forward_1/male_short.mp3' },
+      { voice: 'female', isShort: false, src: 'gs://aum-app-audio/balasana_lying_forward_1/female_full.mp3' },
+      { voice: 'female', isShort: true, src: 'gs://aum-app-audio/balasana_lying_forward_1/female_short.mp3' }
+    ],
     level: 1,
     isCheck: false
   },
-  cobra: {
-    name: 'cobra pose',
-    src: 'gs://',
+  {
+    id: 'bhujangasana_lying_forward_1',
+    name: 'Bhujangasana',
+    adaptName: 'Sphinx Pose',
+    block: 'lying_forward_1',
+    src: 'gs://aum-app-videos/lying_forward_1/sphynx_lying_forward_1.mp4',
+    audioSources: [
+      { voice: 'male', isShort: false, src: 'gs://aum-app-audio/bhujangasana_lying_forward_1/male_full.mp3' },
+      { voice: 'male', isShort: true, src: 'gs://aum-app-audio/bhujangasana_lying_forward_1/male_short.mp3' },
+      { voice: 'female', isShort: false, src: 'gs://aum-app-audio/bhujangasana_lying_forward_1/female_full.mp3' },
+      { voice: 'female', isShort: true, src: 'gs://aum-app-audio/bhujangasana_lying_forward_1/female_short.mp3' }
+    ],
     level: 1,
     isCheck: false
   },
-  child: {
-    name: 'child pose',
-    src: 'gs://',
-    level: 1,
-    isCheck: false
-  },
-  shavanasana: {
-    name: 'shavanasana',
-    src: 'gs://',
+  {
+    id: 'svanasana_lying_forward_1',
+    name: 'Adho Mukha Svanasana',
+    adaptName: 'Downward Facing Dog Pose',
+    block: 'lying_forward_1',
+    src: 'gs://aum-app-videos/lying_forward_1/shavanasana_lying_forward_1.mp4',
+    audioSources: [
+      { voice: 'male', isShort: false, src: 'gs://aum-app-audio/svanasana_lying_forward_1/male_full.mp3' },
+      { voice: 'male', isShort: true, src: 'gs://aum-app-audio/svanasana_lying_forward_1/male_short.mp3' },
+      { voice: 'female', isShort: false, src: 'gs://aum-app-audio/svanasana_lying_forward_1/female_full.mp3' },
+      { voice: 'female', isShort: true, src: 'gs://aum-app-audio/svanasana_lying_forward_1/female_short.mp3' }
+    ],
     level: 1,
     isCheck: true,
-
     rules: [
       {
         line: ['wrist', 'elbow', 'shoulder'],
@@ -148,27 +168,40 @@ const lying_forward_1 = {
       }
     ]
   }
-}
+  // Need cobra
+]
 
-const lying_forward_2 = {
-  sahebhasana: {
-    name: 'sahebhasana',
-    src: 'gs://',
-    level: 2,
+const lying_forward_2 = [
+  // need sahebhasana
+  {
+    id: 'phalakasana_lying_forward_2',
+    name: 'Phalakasana',
+    adaptName: 'Forearm plank',
+    block: 'lying_forward_2',
+    src: 'gs://aum-app-videos/lying_forward_2/plank-lying_forward_2.mp4',
+    audioSources: [
+      { voice: 'male', isShort: false, src: 'gs://aum-app-audio/phalakasana_lying_forward_2/male_full.mp3' },
+      { voice: 'male', isShort: true, src: 'gs://aum-app-audio/phalakasana_lying_forward_2/male_short.mp3' },
+      { voice: 'female', isShort: false, src: 'gs://aum-app-audio/phalakasana_lying_forward_2/female_full.mp3' },
+      { voice: 'female', isShort: true, src: 'gs://aum-app-audio/phalakasana_lying_forward_2/female_short.mp3' }
+    ],
+    level: 1,
     isCheck: false
   },
-  plank: {
-    name: 'plank',
-    src: 'gs://',
-    level: 2,
-    isCheck: false
-  },
-  phanurasana: {
-    name: 'phanurasana',
-    src: 'gs://',
-    level: 2,
+  {
+    id: 'dhanurasana_lying_forward_2',
+    name: 'Dhanurasana',
+    adaptName: 'Bow pose',
+    block: 'lying_forward_2',
+    src: 'gs://aum-app-videos/lying_forward_2/dhanurasana-lying_forward_2.mp4',
+    audioSources: [
+      { voice: 'male', isShort: false, src: 'gs://aum-app-audio/dhanurasana_lying_forward_2/male_full.mp3' },
+      { voice: 'male', isShort: true, src: 'gs://aum-app-audio/dhanurasana_lying_forward_2/male_short.mp3' },
+      { voice: 'female', isShort: false, src: 'gs://aum-app-audio/dhanurasana_lying_forward_2/female_full.mp3' },
+      { voice: 'female', isShort: true, src: 'gs://aum-app-audio/dhanurasana_lying_forward_2/female_short.mp3' }
+    ],
+    level: 1,
     isCheck: true,
-
     rules: [
       {
         line: ['shoulder', 'wrist', 'knee'],
@@ -181,10 +214,25 @@ const lying_forward_2 = {
         offset: { min: 10, max: 10 }
       }
     ]
-  }
-}
+  },
+]
 
 const sitting_1 = {
+  {
+    id: 'purvottanasana_sitting_1',
+    name: 'Purvottanasana',
+    adaptName: 'Upward plank pose',
+    block: 'sitting_1',
+    src: 'gs://aum-app-videos/sitting_1/kurvatopanasana-sitting_1.mp4',
+    audioSources: [
+      { voice: 'male', isShort: false, src: 'gs://aum-app-audio/purvottanasana_sitting_1/male_full.mp3' },
+      { voice: 'male', isShort: true, src: 'gs://aum-app-audio/purvottanasana_sitting_1/male_short.mp3' },
+      { voice: 'female', isShort: false, src: 'gs://aum-app-audio/purvottanasana_sitting_1/female_full.mp3' },
+      { voice: 'female', isShort: true, src: 'gs://aum-app-audio/purvottanasana_sitting_1/female_short.mp3' }
+    ],
+    level: 1,
+    isCheck: false
+  },
   janushirshasana: {
     name: 'janu shirshasana',
     src: 'gs://',
@@ -231,9 +279,18 @@ const sitting_2 = {
     level: 2,
     isCheck: false
   },
-  virasana: {
-    name: 'virasana',
-    src: 'gs://',
+  {
+    id: 'virasana_sitting_2',
+    name: 'Virasana',
+    adaptName: 'Hero Pose',
+    block: 'sitting_2',
+    src: 'gs://aum-app-videos/sitting_2/virasana-sitting_2.mp4',
+    audioSources: [
+      { voice: 'male', isShort: false, src: 'gs://aum-app-audio/virasana_sitting_2/male_full.mp3' },
+      { voice: 'male', isShort: true, src: 'gs://aum-app-audio/virasana_sitting_2/male_short.mp3' },
+      { voice: 'female', isShort: false, src: 'gs://aum-app-audio/virasana_sitting_2/female_full.mp3' },
+      { voice: 'female', isShort: true, src: 'gs://aum-app-audio/virasana_sitting_2/female_short.mp3' }
+    ],
     level: 2,
     isCheck: false
   },
@@ -263,30 +320,51 @@ const sitting_2 = {
   }
 }
 
-const balances_1 = {
-  standing: {
-    name: 'standing',
-    src: 'gs://',
+const balances_1 = [
+  {
+    id: 'utthita_bhujangasana_balances_1',
+    name: 'Utthita Bhujangasana',
+    adaptName: 'Standing Cobra',
+    block: 'balances_1',
+    src: 'gs://aum-app-videos/balances_1/standing-balances_1.mp4',
+    audioSources: [
+      { voice: 'male', isShort: false, src: 'gs://aum-app-audio/utthita_bhujangasana_balances_1/male_full.mp3' },
+      { voice: 'male', isShort: true, src: 'gs://aum-app-audio/utthita_bhujangasana_balances_1/male_short.mp3' },
+      { voice: 'female', isShort: false, src: 'gs://aum-app-audio/utthita_bhujangasana_balances_1/female_full.mp3' },
+      { voice: 'female', isShort: true, src: 'gs://aum-app-audio/utthita_bhujangasana_balances_1/female_short.mp3' }
+    ],
+    level: 2,
+    isCheck: false
+  },
+  // need tree
+  {
+    id: 'virabhadrasana_left_balances_1',
+    name: 'Virabhadrasana (left)',
+    adaptName: 'Warrinr pose (left side)',
+    block: 'balances_1',
+    src: 'gs://aum-app-videos/balances_1/warrior_left-balances_1.mp4',
+    audioSources: [
+      { voice: 'male', isShort: false, src: 'gs://aum-app-audio/virabhadrasana_left_balances_1/male_full.mp3' },
+      { voice: 'male', isShort: true, src: 'gs://aum-app-audio/virabhadrasana_left_balances_1/male_short.mp3' },
+      { voice: 'female', isShort: false, src: 'gs://aum-app-audio/virabhadrasana_left_balances_1/female_full.mp3' },
+      { voice: 'female', isShort: true, src: 'gs://aum-app-audio/virabhadrasana_left_balances_1/female_short.mp3' }
+    ],
     level: 1,
     isCheck: false
   },
-  tree: {
-    name: 'tree pose',
-    src: 'gs://',
-    level: 1,
-    isCheck: false
-  },
-  warrior_left: {
-    name: 'child pose',
-    src: 'gs://',
-    level: 1,
-    isCheck: false
-  },
-  warrior_right: {
-    name: 'warrior right',
-    src: 'gs://',
-    level: 1,
-    isCheck: true,
+  {
+    id: 'virabhadrasana_right_balances_1',
+    name: 'Virabhadrasana (right)',
+    adaptName: 'Warrinr pose (right side)',
+    block: 'balances_1',
+    src: 'gs://aum-app-videos/balances_1/warrior_right-balances_1.mp4',
+    audioSources: [
+      { voice: 'male', isShort: false, src: 'gs://aum-app-audio/virabhadrasana_right_balances_1/male_full.mp3' },
+      { voice: 'male', isShort: true, src: 'gs://aum-app-audio/virabhadrasana_right_balances_1/male_short.mp3' },
+      { voice: 'female', isShort: false, src: 'gs://aum-app-audio/virabhadrasana_right_balances_1/female_full.mp3' },
+      { voice: 'female', isShort: true, src: 'gs://aum-app-audio/virabhadrasana_right_balances_1/female_short.mp3' }
+    ],
+    level: 1,,
     rules: [
       {
         line: ['wrist', 'hip', 'ankle'],
@@ -351,31 +429,51 @@ const balances_2 = {
   }
 }
 
-const standing_1 = {
-  utkhatasana: {
-    name: 'utkhatasana',
-    src: 'gs://',
+const standing_1 = [
+  {
+    id: 'utkatasana_standing_1',
+    name: 'Utkatasana',
+    adaptName: 'Chair pose',
+    block: 'standing_1',
+    src: 'gs://aum-app-videos/standing_1/chest-standing_1.mp4',
+    audioSources: [
+      { voice: 'male', isShort: false, src: 'gs://aum-app-audio/utkatasana_standing_1/male_full.mp3' },
+      { voice: 'male', isShort: true, src: 'gs://aum-app-audio/utkatasana_standing_1/male_short.mp3' },
+      { voice: 'female', isShort: false, src: 'gs://aum-app-audio/utkatasana_standing_1/female_full.mp3' },
+      { voice: 'female', isShort: true, src: 'gs://aum-app-audio/utkatasana_standing_1/female_short.mp3' }
+    ],
     level: 1,
     isCheck: false
   },
-  uttanasana: {
-    name: 'uttanasana',
-    src: 'gs://',
+  {
+    id: 'trikonasana_left_standing_1',
+    name: 'Utthita Trikonasana',
+    adaptName: 'Triangle Pose (left side)',
+    block: 'standing_1',
+    src: 'gs://aum-app-videos/standing_1/triokonasana_left-standing_1.mp4',
+    audioSources: [
+      { voice: 'male', isShort: false, src: 'gs://aum-app-audio/trikonasana_left_standing_1/male_full.mp3' },
+      { voice: 'male', isShort: true, src: 'gs://aum-app-audio/trikonasana_left_standing_1/male_short.mp3' },
+      { voice: 'female', isShort: false, src: 'gs://aum-app-audio/trikonasana_left_standing_1/female_full.mp3' },
+      { voice: 'female', isShort: true, src: 'gs://aum-app-audio/trikonasana_left_standing_1/female_short.mp3' }
+    ],
     level: 1,
     isCheck: false
   },
-  trikonasana_left: {
-    name: 'trikonasana left',
-    src: 'gs://',
-    level: 1,
-    isCheck: false
-  },
-  trikonasana_right: {
-    name: 'trikonasana right',
-    src: 'gs://',
+  {
+    id: 'trikonasana_right_standing_1',
+    name: 'Utthita Trikonasana',
+    adaptName: 'Triangle Pose (right side)',
+    block: 'standing_1',
+    src: 'gs://aum-app-videos/standing_1/trikonasana_right-standing_1.mp4',
+    audioSources: [
+      { voice: 'male', isShort: false, src: 'gs://aum-app-audio/trikonasana_right_standing_1/male_full.mp3' },
+      { voice: 'male', isShort: true, src: 'gs://aum-app-audio/trikonasana_right_standing_1/male_short.mp3' },
+      { voice: 'female', isShort: false, src: 'gs://aum-app-audio/trikonasana_right_standing_1/female_full.mp3' },
+      { voice: 'female', isShort: true, src: 'gs://aum-app-audio/trikonasana_right_standing_1/female_short.mp3' }
+    ],
     level: 1,
     isCheck: true,
-
     rules: [
       {
         line: ['leftAnkle', 'leftKnee', 'leftHip'],
@@ -394,13 +492,22 @@ const standing_1 = {
       }
     ]
   }
-}
+]
 
 const standing_2 = {
-  padonttanasana: {
-    name: 'padonttanasana',
-    src: 'gs://',
-    level: 2,
+  {
+    id: 'padangusthasana_standing_2',
+    name: 'Padangusthasana',
+    adaptName: 'Forward Fold',
+    block: 'standing_1',
+    src: 'gs://aum-app-videos/standing_2/paddotanasana-standing_2.mp4',
+    audioSources: [
+      { voice: 'male', isShort: false, src: 'gs://aum-app-audio/padangusthasana_standing_2/male_full.mp3' },
+      { voice: 'male', isShort: true, src: 'gs://aum-app-audio/padangusthasana_standing_2/male_short.mp3' },
+      { voice: 'female', isShort: false, src: 'gs://aum-app-audio/padangusthasana_standing_2/female_full.mp3' },
+      { voice: 'female', isShort: true, src: 'gs://aum-app-audio/padangusthasana_standing_2/female_short.mp3' }
+    ],
+    level: 1,
     isCheck: false
   },
   parivakotanasana_left: {

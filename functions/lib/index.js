@@ -15,7 +15,7 @@
  */
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get_user_result = exports.get_asana_queue = exports.handle_user_asana_img_upload = void 0;
+exports.get_user = exports.get_user_result = exports.get_asana_queue = exports.create_user = exports.handle_user_asana_img_upload = void 0;
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 admin.initializeApp();
@@ -25,6 +25,10 @@ const handlers_1 = require("./handlers");
  * which contain result of ts.poseNet, and patching exist model of user data
  */
 exports.handle_user_asana_img_upload = (file) => handlers_1.analyse_img(file).then(result => handlers_1.update_user_result(result)).catch((err) => console.log(err));
+/**
+ * Other triggers;
+ */
+exports.create_user = functions.auth.user().onCreate((user) => handlers_1.create_user_model(user));
 /**
  * API handlers for a plain http requests
  */
@@ -41,6 +45,17 @@ exports.get_asana_queue = functions.https.onRequest(async (req, res) => {
 exports.get_user_result = functions.https.onRequest(async (req, res) => {
     try {
         const result = await handlers_1.get_result();
+        res.status(200).json(result);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
+});
+exports.get_user = functions.https.onRequest(async (req, res) => {
+    try {
+        const { id } = req.query;
+        const result = await handlers_1.get_user_model(id);
         res.status(200).json(result);
     }
     catch (err) {
