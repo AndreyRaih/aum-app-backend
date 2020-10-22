@@ -9,21 +9,13 @@ export class AumFirebaseRepository {
    * @description Public method 
    */
   async getAllAsanas () {
-    return this.db.collection('asanas').get().then(snapshot => snapshot.docs.map(doc => ({block: doc.id, items: doc.data()}))); 
+    return this.db.collection('asanas').get().then(snapshot => snapshot.docs.map(doc => ({ block: doc.id, ...doc.data() }))); 
   }
   /**
    * @description Public method 
    */
   async getAsana ({ name, block }) {
     return this.db.collection('asanas').doc(block).get().then(doc => doc.data()[name]);
-  }
-  /**
-   * @description Public method 
-   */
-  async getLastResult () {
-    return this.db.collection('results_test_compare').doc('result_test').get()
-      .then(snapshot => snapshot.data())
-      .then(source => Object.values(source));
   }
   /**
    * @description Public method 
@@ -40,14 +32,9 @@ export class AumFirebaseRepository {
   /**
    * @description Public method 
    */
-  async setUserModel ({ id, data }) {
-    const resultRef = this.db.collection('users').doc(id);
-    const doc = await resultRef.get();
-    if (!doc.exists) {
-      return resultRef.set(data);
-    } else {
-      return new Error('User already exist!');
-    }
+  async setUserModel(id, data) {
+    const userRef = await this._getUserRef(id);
+    await userRef.set(data);
   }
   /**
    * @description Public method 
@@ -55,4 +42,17 @@ export class AumFirebaseRepository {
   async getUserModel (id) {
     return this.db.collection('users').doc(id).get().then(snapshot => snapshot.data())
   };
+
+  /**
+   * @description Public method 
+   */
+  async updateUserModel (id, updates) {
+    const userRef = await this._getUserRef(id);
+    const [key, value] = Object.entries(updates);
+    await userRef.update({[`${key}`]: value});
+  }
+  /**
+   * @description Private method
+   */
+  _getUserRef (id) { return this.db.collection('users').doc(id) }
 }

@@ -5,10 +5,11 @@ admin.initializeApp();
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
 
-const { asanas } = require('./asanas');
+const { asanas } = require('../functions/src/asanas');
 
 exports.rules_deploy = functions.https.onRequest(async (request, response) => {
   for (let [doc, value] of Object.entries(asanas)) {
-    await admin.firestore().collection('asanas').doc(doc).set(value);
+    console.log(doc, value);
+    await admin.firestore().collection('asanas').doc(value).set(value);
   };
 });

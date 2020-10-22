@@ -9,7 +9,7 @@ import posenet from '@tensorflow-models/posenet';
 import { Image } from 'canvas';
 import { createCanvas } from 'canvas';
 
-class AumPoseEstimate {
+class PoseEstimator {
   constructor ({ bucket, filename}) {
     this.storageRepository = new AumFirestorageRepository();
     this.bucket = bucket;
@@ -64,7 +64,7 @@ class AumPoseEstimate {
 }
 
 
-export class AumPoseAnalyser extends AumPoseEstimate {
+export class PoseAnalyser extends PoseEstimator {
   constructor(data) {
     super(data);
     this.firebaseRepository = new AumFirebaseRepository();

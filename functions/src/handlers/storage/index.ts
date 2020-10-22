@@ -1,14 +1,8 @@
 'use strict';
 
-import { AumPoseAnalyser } from '../pose-analyser';
-import { AumFirebaseRepository } from '../../repositories/firebase';
+import { PoseAnalyser } from '../pose-analyser';
 
 export const analyseImg = (file) => {
-  const analyser = new AumPoseAnalyser(file);
+  const analyser = new PoseAnalyser(file);
   return analyser.getAnalyse();
-};
-
-export const setAnalyseResultFromUserModel = (updates) => {
-  const repository = new AumFirebaseRepository();
-  return repository.setUserResult(updates);
 };

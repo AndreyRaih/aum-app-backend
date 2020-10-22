@@ -1,6 +1,6 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AumPoseAnalyser = void 0;
+exports.PoseAnalyser = void 0;
 const firestorage_1 = require("../repositories/firestorage");
 const firebase_1 = require("../repositories/firebase");
 // Tensorflow
@@ -9,7 +9,7 @@ const posenet_1 = require("@tensorflow-models/posenet");
 // Image and canvas
 const canvas_1 = require("canvas");
 const canvas_2 = require("canvas");
-class AumPoseEstimate {
+class PoseEstimator {
     constructor({ bucket, filename }) {
         this.storageRepository = new firestorage_1.AumFirestorageRepository();
         this.bucket = bucket;
@@ -64,7 +64,7 @@ class AumPoseEstimate {
         return keypoints;
     }
 }
-class AumPoseAnalyser extends AumPoseEstimate {
+class PoseAnalyser extends PoseEstimator {
     constructor(data) {
         super(data);
         this.firebaseRepository = new firebase_1.AumFirebaseRepository();
@@ -112,5 +112,5 @@ class AumPoseAnalyser extends AumPoseEstimate {
         return Math.acos((bc * bc + ab * ab - ac * ac) / (2 * bc * ab));
     }
 }
-exports.AumPoseAnalyser = AumPoseAnalyser;
+exports.PoseAnalyser = PoseAnalyser;
 //# sourceMappingURL=pose-analyser.js.map

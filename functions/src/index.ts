@@ -17,23 +17,32 @@
 
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
+import * as asanas from './asanas';
 admin.initializeApp()
 
-import { build_queue, get_result, analyse_img, update_user_result, create_user_model, get_user_model } from './handlers';
-import { AumFirebaseRepository } from './repositories/firebase';
+import { build_queue, analyse_img, create_user_model, get_user_model, update_user_model, build_updates, AnalyseResults, UserModelUpdates } from './handlers';
 
 /**
  * Triggers by firestorage segments. Needs for a parse users images, build models,
  * which contain result of ts.poseNet, and patching exist model of user data
  */
 
-export const handle_user_asana_img_upload = (file) => analyse_img(file).then(result => update_user_result(result)).catch((err) => console.log(err));
+export const handle_user_asana_img_upload = functions.storage.object().onFinalize(async (file, context) => {
+  try {
+    const { uid: id } = context.auth;
+    const analyseResult: AnalyseResults | Error = await analyse_img(file);
+    const updates: UserModelUpdates = await build_updates(id, analyseResult as AnalyseResults);
+    await update_user_model(id, updates);
+  } catch (err) {
+    console.log(err)
+  }
+});
 
 /**
  * Other triggers;
  */
 
-export const create_user = functions.auth.user().onCreate((user) => create_user_model(user));
+export const create_user = functions.auth.user().onCreate(({ uid: id }) => create_user_model(id));
 
 /**
  * API handlers for a plain http requests
@@ -41,7 +50,7 @@ export const create_user = functions.auth.user().onCreate((user) => create_user_
 
 export const get_asana_queue = functions.https.onRequest(async (req, res) => {
   try {
-    const queue = await build_queue(req.query);
+    const queue = await build_queue();
     res.status(200).json(queue);
   } catch (err) {
     console.log(err);
@@ -49,9 +58,10 @@ export const get_asana_queue = functions.https.onRequest(async (req, res) => {
   }
 });
 
-export const get_user_result = functions.https.onRequest(async (req, res) => {
+export const get_user = functions.https.onRequest(async (req, res) => {
   try {
-    const result = await get_result();
+    const { id } = req.query;
+    const result = await get_user_model(id as string);
     res.status(200).json(result);
   } catch (err) {
     console.log(err);
@@ -59,14 +69,30 @@ export const get_user_result = functions.https.onRequest(async (req, res) => {
   }
 });
 
-
-export const get_user = functions.https.onRequest(async (req, res) => {
+export const update_user = functions.https.onRequest(async (req, res) => {
   try {
-    const { id } = req.query;
-    const result = await get_user_model(id);
+    const { id, updates } = req.body;
+    await update_user_model(id, updates);
+    res.status(200);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+/* export const get_user_result = functions.https.onRequest(async (req, res) => {
+  try {
+    const result = await get_result();
     res.status(200).json(result);
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
   }
+}); */
+
+export const rules_deploy = functions.https.onRequest(async (request, response) => {
+  for (const [doc, value] of Object.entries(asanas.asanas)) {
+    await admin.firestore().collection('asanas').doc(doc).set({ value });
+  };
+  response.status(200);
 });

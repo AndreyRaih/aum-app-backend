@@ -1,5 +1,5 @@
 const lying_back_1 = [
-  {
+  /* {
     id: 'right_twist_lying_back_1',
     name: 'right twist',
     adaptName: '',
@@ -62,11 +62,11 @@ const lying_back_1 = [
         offset: { min: 5, max: 5 }
       }
     ]
-  }
+  } */
 ]
 
-const lying_back_2 = {
-  ardha_navasana: {
+const lying_back_2 = [
+  /*ardha_navasana: {
     name: 'ardha navasana',
     src: 'gs://',
     level: 2,
@@ -102,8 +102,8 @@ const lying_back_2 = {
         offset: { min: 5, max: 5 }
       }
     ]
-  }
-}
+  } */
+]
 
 const lying_forward_1 = [
   {
@@ -217,7 +217,7 @@ const lying_forward_2 = [
   },
 ]
 
-const sitting_1 = {
+const sitting_1 = [
   {
     id: 'purvottanasana_sitting_1',
     name: 'Purvottanasana',
@@ -233,7 +233,7 @@ const sitting_1 = {
     level: 1,
     isCheck: false
   },
-  janushirshasana: {
+  /* janushirshasana: {
     name: 'janu shirshasana',
     src: 'gs://',
     level: 1,
@@ -263,11 +263,11 @@ const sitting_1 = {
         offset: { min: 5, max: 5 }
       }
     ]
-  }
-}
+  } */
+]
 
-const sitting_2 = {
-  turn_right: {
+const sitting_2 = [
+  /* turn_right: {
     name: 'turn right',
     src: 'gs://',
     level: 2,
@@ -278,7 +278,7 @@ const sitting_2 = {
     src: 'gs://',
     level: 2,
     isCheck: false
-  },
+  }, */
   {
     id: 'virasana_sitting_2',
     name: 'Virasana',
@@ -294,7 +294,7 @@ const sitting_2 = {
     level: 2,
     isCheck: false
   },
-  paschimothanasana: {
+  /* paschimothanasana: {
     name: 'paschimothanasana',
     src: 'gs://',
     level: 2,
@@ -317,8 +317,8 @@ const sitting_2 = {
         offset: { min: 10, max: 10 }
       }
     ]
-  }
-}
+  } */
+]
 
 const balances_1 = [
   {
@@ -364,7 +364,7 @@ const balances_1 = [
       { voice: 'female', isShort: false, src: 'gs://aum-app-audio/virabhadrasana_right_balances_1/female_full.mp3' },
       { voice: 'female', isShort: true, src: 'gs://aum-app-audio/virabhadrasana_right_balances_1/female_short.mp3' }
     ],
-    level: 1,,
+    level: 1,
     rules: [
       {
         line: ['wrist', 'hip', 'ankle'],
@@ -383,10 +383,10 @@ const balances_1 = [
       }
     ]
   }
-}
+]
 
-const balances_2 = {
-  twist_right: {
+const balances_2 = [
+  /* twist_right: {
     name: 'twist right',
     src: 'gs://',
     level: 2,
@@ -426,8 +426,8 @@ const balances_2 = {
         offset: { min: 5, max: 5 }
       }
     ]
-  }
-}
+  } */
+]
 
 const standing_1 = [
   {
@@ -494,7 +494,7 @@ const standing_1 = [
   }
 ]
 
-const standing_2 = {
+const standing_2 = [
   {
     id: 'padangusthasana_standing_2',
     name: 'Padangusthasana',
@@ -510,7 +510,7 @@ const standing_2 = {
     level: 1,
     isCheck: false
   },
-  parivakotanasana_left: {
+  /* parivakotanasana_left: {
     name: 'parivakotanasana left',
     src: 'gs://',
     level: 2,
@@ -551,8 +551,8 @@ const standing_2 = {
         offset: { min: 5, max: 5 }
       }
     ]
-  }
-}
+  } */
+]
 
 exports.asanas = {
   lying_back_1,

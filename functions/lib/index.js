@@ -15,37 +15,38 @@
  */
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get_user = exports.get_user_result = exports.get_asana_queue = exports.create_user = exports.handle_user_asana_img_upload = void 0;
+exports.rules_deploy = exports.update_user = exports.get_user = exports.get_asana_queue = exports.create_user = exports.handle_user_asana_img_upload = void 0;
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
+const asanas = require("./asanas");
 admin.initializeApp();
 const handlers_1 = require("./handlers");
 /**
  * Triggers by firestorage segments. Needs for a parse users images, build models,
  * which contain result of ts.poseNet, and patching exist model of user data
  */
-exports.handle_user_asana_img_upload = (file) => handlers_1.analyse_img(file).then(result => handlers_1.update_user_result(result)).catch((err) => console.log(err));
+exports.handle_user_asana_img_upload = functions.storage.object().onFinalize(async (file, context) => {
+    try {
+        const { uid: id } = context.auth;
+        const analyseResult = await handlers_1.analyse_img(file);
+        const updates = await handlers_1.build_updates(id, analyseResult);
+        await handlers_1.update_user_model(id, updates);
+    }
+    catch (err) {
+        console.log(err);
+    }
+});
 /**
  * Other triggers;
  */
-exports.create_user = functions.auth.user().onCreate((user) => handlers_1.create_user_model(user));
+exports.create_user = functions.auth.user().onCreate(({ uid: id }) => handlers_1.create_user_model(id));
 /**
  * API handlers for a plain http requests
  */
 exports.get_asana_queue = functions.https.onRequest(async (req, res) => {
     try {
-        const queue = await handlers_1.build_queue(req.query);
+        const queue = await handlers_1.build_queue();
         res.status(200).json(queue);
-    }
-    catch (err) {
-        console.log(err);
-        res.status(500).json(err);
-    }
-});
-exports.get_user_result = functions.https.onRequest(async (req, res) => {
-    try {
-        const result = await handlers_1.get_result();
-        res.status(200).json(result);
     }
     catch (err) {
         console.log(err);
@@ -62,5 +63,32 @@ exports.get_user = functions.https.onRequest(async (req, res) => {
         console.log(err);
         res.status(500).json(err);
     }
+});
+exports.update_user = functions.https.onRequest(async (req, res) => {
+    try {
+        const { id, updates } = req.body;
+        await handlers_1.update_user_model(id, updates);
+        res.status(200);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
+});
+/* export const get_user_result = functions.https.onRequest(async (req, res) => {
+  try {
+    const result = await get_result();
+    res.status(200).json(result);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+}); */
+exports.rules_deploy = functions.https.onRequest(async (request, response) => {
+    for (const [doc, value] of Object.entries(asanas.asanas)) {
+        await admin.firestore().collection('asanas').doc(doc).set({ value });
+    }
+    ;
+    response.status(200);
 });
 //# sourceMappingURL=index.js.map

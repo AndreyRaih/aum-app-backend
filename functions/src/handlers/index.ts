@@ -1,27 +1,39 @@
 'use strict';
 
-import { getAllQueueFromFirebase, buildPersonalQueue } from './endpoints/queue';
-import { lastResult, createUserModel, getUserModel } from './endpoints/user';
-import { analyseImg, setAnalyseResultFromUserModel } from './storage';
+import { getFullQueueFromFirebase, parseResultsForUpdates } from './endpoints/content';
+import { createUserModel, getUserModel, updateUserModel } from './endpoints/user';
+import { analyseImg } from './storage';
 
-export interface AumQueueSettings {
-  time?: String,
-  voice?: String,
-  complexity?: String
+export interface IAnalyseResultItem {
+  chain: string,
+  deg: any,
+  isDone: boolean
 }
+
+export type AnalyseResults = {
+  name: string,
+  block: string,
+  result: Array<IAnalyseResultItem>
+}
+
+export type UserModelUpdates = {
+  [key: string]: any
+}
+
+// Image handlers
 
 export const analyse_img = analyseImg;
 
-export const update_user_result = setAnalyseResultFromUserModel;
+export const build_updates = (id: string, results: AnalyseResults) => parseResultsForUpdates(id, results);
 
-export const build_queue = async (settings: AumQueueSettings) => {
-  const fullQueue = await getAllQueueFromFirebase();
-  const queue = await buildPersonalQueue(fullQueue, settings);
-  return queue;
-};
+// Queue handlers
 
-export const get_result = async () => lastResult();
+export const build_queue = () => getFullQueueFromFirebase();
 
-export const get_user_model = async (id) => getUserModel(id);
+// User handlers
 
-export const create_user_model = async (data) => createUserModel(data);
+export const get_user_model = (id: string) => getUserModel(id);
+
+export const create_user_model = (id: string) => createUserModel(id);
+
+export const update_user_model = (id: string, updates: UserModelUpdates) => updateUserModel(id, updates);
