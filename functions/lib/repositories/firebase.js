@@ -1,4 +1,11 @@
 "use strict";
+var __asyncValues = (this && this.__asyncValues) || function (o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AumFirebaseRepository = void 0;
 const admin = require("firebase-admin");
@@ -49,14 +56,35 @@ class AumFirebaseRepository {
      * @description Public method
      */
     async updateUserModel(id, updates) {
+        var e_1, _a;
         const userRef = await this._getUserRef(id);
-        const [key, value] = Object.entries(updates);
-        await userRef.update({ [`${key}`]: value });
+        try {
+            try {
+                for (var _b = __asyncValues(Object.entries(updates)), _c; _c = await _b.next(), !_c.done;) {
+                    const [key, value] = _c.value;
+                    await userRef.update({ [`${key}`]: value });
+                }
+            }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (_c && !_c.done && (_a = _b.return)) await _a.call(_b);
+                }
+                finally { if (e_1) throw e_1.error; }
+            }
+            ;
+            return Promise.resolve();
+        }
+        catch (error) {
+            return Promise.reject(error);
+        }
     }
     /**
      * @description Private method
      */
-    _getUserRef(id) { return this.db.collection('users').doc(id); }
+    _getUserRef(id) {
+        return this.db.collection('users').doc(id);
+    }
 }
 exports.AumFirebaseRepository = AumFirebaseRepository;
 //# sourceMappingURL=firebase.js.map

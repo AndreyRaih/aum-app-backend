@@ -1,6 +1,6 @@
 'use strict';
 
-import { getFullQueueFromFirebase, parseResultsForUpdates } from './endpoints/content';
+import { addNewSession, getFullQueueFromFirebase, getQueuePreview, parseResultsForUpdates } from './endpoints/content';
 import { createUserModel, getUserModel, updateUserModel } from './endpoints/user';
 import { analyseImg } from './storage';
 
@@ -20,6 +20,12 @@ export type UserModelUpdates = {
   [key: string]: any
 }
 
+export type SessionModel = {
+  duration: number,
+  asanaQuantity: number,
+  userRange: number
+}
+
 // Image handlers
 
 export const analyse_img = analyseImg;
@@ -28,7 +34,11 @@ export const build_updates = (id: string, results: AnalyseResults) => parseResul
 
 // Queue handlers
 
+export const practice_preview = () => getQueuePreview();
+
 export const build_queue = () => getFullQueueFromFirebase();
+
+export const add_session = (id: string, data: SessionModel) => addNewSession(id, data);
 
 // User handlers
 

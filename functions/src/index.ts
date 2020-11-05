@@ -20,7 +20,7 @@ import * as admin from 'firebase-admin';
 import * as asanas from './asanas';
 admin.initializeApp()
 
-import { build_queue, analyse_img, create_user_model, get_user_model, update_user_model, build_updates, AnalyseResults, UserModelUpdates } from './handlers';
+import { build_queue, analyse_img, create_user_model, get_user_model, update_user_model, build_updates, AnalyseResults, SessionModel, UserModelUpdates, practice_preview, add_session } from './handlers';
 
 /**
  * Triggers by firestorage segments. Needs for a parse users images, build models,
@@ -48,10 +48,32 @@ export const create_user = functions.auth.user().onCreate(({ uid: id }) => creat
  * API handlers for a plain http requests
  */
 
+export const get_practice_preview = functions.https.onRequest(async (req, res) => {
+  try {
+    const preview = await practice_preview();
+    res.status(200).json(preview);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
 export const get_asana_queue = functions.https.onRequest(async (req, res) => {
   try {
     const queue = await build_queue();
     res.status(200).json(queue);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+export const add_session_result = functions.https.onRequest(async (req, res) => {
+  try {
+    const { id, session } = req.body;
+    const updates: UserModelUpdates = await add_session(id, session as SessionModel);
+    await update_user_model(id, updates);
+    res.status(200).send('OK');
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
@@ -69,16 +91,17 @@ export const get_user = functions.https.onRequest(async (req, res) => {
   }
 });
 
-export const update_user = functions.https.onRequest(async (req, res) => {
+export const update_user = functions.https.onRequest(async (req: functions.https.Request, res) => {
   try {
     const { id, updates } = req.body;
     await update_user_model(id, updates);
-    res.status(200);
+    res.status(200).send('OK');
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
   }
 });
+
 
 /* export const get_user_result = functions.https.onRequest(async (req, res) => {
   try {

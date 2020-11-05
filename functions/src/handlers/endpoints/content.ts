@@ -1,12 +1,26 @@
-import uid from 'uid';
-import { AnalyseResults } from '..';
+import * as uid from 'uid/dist/index';
+import { AnalyseResults, SessionModel } from '../index';
 import { AumFirebaseRepository } from '../../repositories/firebase';
 const repository = new AumFirebaseRepository();
 
 export const getFullQueueFromFirebase = () => repository.getAllAsanas()
 
+export const getQueuePreview = () => {
+  // Add request to db with practice types
+  return {
+    name: 'Stress relief practice',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ornare pretium placerat ut platea. Purus blandit integer sagittis massa vel est hac.',
+    includes: [
+      'Balances',
+      'standing'
+    ],
+    time: 2100,
+    cal: 240
+  };
+};
+
 export const parseResultsForUpdates = async (id, results: AnalyseResults) => {
-  let { recentResults, levels, sessions } = await repository.getUserModel(id);
+  let { recentResults, levels } = await repository.getUserModel(id);
   const lastSessionResultObj = {
     id: uid(),
     date: Date.now(),
@@ -20,15 +34,20 @@ export const parseResultsForUpdates = async (id, results: AnalyseResults) => {
       failures: results.result.filter(entry => !entry.isDone)
     }
   };
-  recentResults = [...recentResults].push(lastSessionResultObj.resultModel);
+  recentResults.push(lastSessionResultObj.resultModel);
   levels = { ...levels, ...lastSessionResultObj.levelUpdates };
-  sessions = [...sessions].push({
-    date: lastSessionResultObj.date,
-    id: lastSessionResultObj.id
-  });
   return {
     recentResults,
-    levels,
-    sessions
+    levels
   }
+}
+
+export const addNewSession = async (id: string, sessionData: SessionModel ) => {
+  const { sessions } = await repository.getUserModel(id);
+  sessions.push({
+    id: uid(),
+    date: Date.now(),
+    ...sessionData
+  });
+  return { sessions };
 }

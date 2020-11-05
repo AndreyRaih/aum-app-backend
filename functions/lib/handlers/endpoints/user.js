@@ -6,10 +6,7 @@ const repository = new firebase_1.AumFirebaseRepository();
 exports.createUserModel = (id) => {
     const data = {
         id,
-        name,
-        ageGroup: null,
-        weight: null,
-        totalLevel: 1,
+        name: null,
         levels: {
             standing: 1,
             sitting: 1,

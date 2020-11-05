@@ -1,15 +1,26 @@
 import { UserModelUpdates } from '..';
 import { AumFirebaseRepository } from '../../repositories/firebase';
 
+type UserModel = {
+  id: string,
+  name: string,
+  levels: {
+    standing: number,
+    sitting: number,
+    balances: number,
+    lying_forward: number,
+    lying_back: number
+  },
+  recentResults: any[],
+  sessions: any[]
+}
+
 const repository = new AumFirebaseRepository();
 
-export const createUserModel = (id: String) => {
-  const data = { 
+export const createUserModel = (id: string) => {
+  const data: UserModel = { 
     id,
-    name,
-    ageGroup: null,
-    weight: null,
-    totalLevel: 1,
+    name: null,
     levels: {
       standing: 1,
       sitting: 1,
@@ -23,6 +34,6 @@ export const createUserModel = (id: String) => {
   return repository.setUserModel(id, data);
 };
 
-export const getUserModel = (id: String) => repository.getUserModel(id);
+export const getUserModel = (id: string) => repository.getUserModel(id);
 
-export const updateUserModel = (id: String, updates: UserModelUpdates) => repository.updateUserModel(id, updates);
+export const updateUserModel = (id: string, updates: UserModelUpdates) => repository.updateUserModel(id, updates);

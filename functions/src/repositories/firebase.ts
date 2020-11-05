@@ -1,4 +1,5 @@
 import * as admin from 'firebase-admin';
+import { UserModelUpdates } from '../handlers';
 
 export class AumFirebaseRepository {
   db: FirebaseFirestore.Firestore;
@@ -46,13 +47,21 @@ export class AumFirebaseRepository {
   /**
    * @description Public method 
    */
-  async updateUserModel (id, updates) {
+  async updateUserModel (id: string, updates: UserModelUpdates) {
     const userRef = await this._getUserRef(id);
-    const [key, value] = Object.entries(updates);
-    await userRef.update({[`${key}`]: value});
+    try {
+      for await (const [key, value] of Object.entries(updates)) {
+        await userRef.update({[`${key}`]: value});
+      };
+      return Promise.resolve();
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
   /**
    * @description Private method
    */
-  _getUserRef (id) { return this.db.collection('users').doc(id) }
+  _getUserRef (id) {
+    return this.db.collection('users').doc(id);
+  }
 }

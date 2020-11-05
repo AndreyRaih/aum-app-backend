@@ -15,7 +15,7 @@
  */
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.rules_deploy = exports.update_user = exports.get_user = exports.get_asana_queue = exports.create_user = exports.handle_user_asana_img_upload = void 0;
+exports.rules_deploy = exports.update_user = exports.get_user = exports.add_session_result = exports.get_asana_queue = exports.get_practice_preview = exports.create_user = exports.handle_user_asana_img_upload = void 0;
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const asanas = require("./asanas");
@@ -43,10 +43,32 @@ exports.create_user = functions.auth.user().onCreate(({ uid: id }) => handlers_1
 /**
  * API handlers for a plain http requests
  */
+exports.get_practice_preview = functions.https.onRequest(async (req, res) => {
+    try {
+        const preview = await handlers_1.practice_preview();
+        res.status(200).json(preview);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
+});
 exports.get_asana_queue = functions.https.onRequest(async (req, res) => {
     try {
         const queue = await handlers_1.build_queue();
         res.status(200).json(queue);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
+});
+exports.add_session_result = functions.https.onRequest(async (req, res) => {
+    try {
+        const { id, session } = req.body;
+        const updates = await handlers_1.add_session(id, session);
+        await handlers_1.update_user_model(id, updates);
+        res.status(200).send('OK');
     }
     catch (err) {
         console.log(err);
@@ -68,7 +90,7 @@ exports.update_user = functions.https.onRequest(async (req, res) => {
     try {
         const { id, updates } = req.body;
         await handlers_1.update_user_model(id, updates);
-        res.status(200);
+        res.status(200).send('OK');
     }
     catch (err) {
         console.log(err);
