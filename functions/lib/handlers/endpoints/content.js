@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addNewSession = exports.parseResultsForUpdates = exports.getQueuePreview = exports.getFullQueueFromFirebase = void 0;
+exports.createFact = exports.addNewSession = exports.parseResultsForUpdates = exports.getQueuePreview = exports.getFullQueueFromFirebase = void 0;
 const uid = require("uid/dist/index");
 const firebase_1 = require("../../repositories/firebase");
 const repository = new firebase_1.AumFirebaseRepository();
@@ -42,7 +42,16 @@ exports.parseResultsForUpdates = async (id, results) => {
 };
 exports.addNewSession = async (id, sessionData) => {
     const { sessions } = await repository.getUserModel(id);
-    sessions.push(Object.assign({ id: uid(), date: Date.now() }, sessionData));
+    sessions.push(Object.assign({ id: uid(), date: `${new Date().getFullYear()}-${(new Date().getMonth() + 1) > 9 ? (new Date().getMonth() + 1) : `0${(new Date().getMonth() + 1)}`}-${new Date().getDate() > 9 ? new Date().getDate() : `0${new Date().getDate()}`}`, duration: sessionData.asanaQuantity * 45, cal: sessionData.asanaQuantity * 10 }, sessionData));
     return { sessions };
+};
+exports.createFact = () => {
+    const pos = Math.floor(Math.random() * Math.floor(3));
+    const facts = [
+        'Today in the West, Yoga is largely dominated by women. However, up until 1937 it was a male-only practice.',
+        'A practice of both physical, mental and spiritual nature, there are an estimated 300 million people partaking in Yoga as of today.',
+        'There is research suggesting Yoga, along with meditation, can help delay ageing.'
+    ];
+    return facts[pos];
 };
 //# sourceMappingURL=content.js.map

@@ -20,7 +20,7 @@ import * as admin from 'firebase-admin';
 import * as asanas from './asanas';
 admin.initializeApp()
 
-import { build_queue, analyse_img, create_user_model, get_user_model, update_user_model, build_updates, AnalyseResults, SessionModel, UserModelUpdates, practice_preview, add_session } from './handlers';
+import { build_queue, analyse_img, create_user_model, get_user_model, update_user_model, build_updates, AnalyseResults, SessionModel, UserModelUpdates, practice_preview, add_session, create_fun_fact } from './handlers';
 
 /**
  * Triggers by firestorage segments. Needs for a parse users images, build models,
@@ -96,6 +96,16 @@ export const update_user = functions.https.onRequest(async (req: functions.https
     const { id, updates } = req.body;
     await update_user_model(id, updates);
     res.status(200).send('OK');
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+export const get_fact = functions.https.onRequest(async (req, res) => {
+  try {
+    const fact = await create_fun_fact();
+    res.status(200).send(fact);
   } catch (err) {
     console.log(err);
     res.status(500).json(err);

@@ -15,7 +15,7 @@
  */
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.rules_deploy = exports.update_user = exports.get_user = exports.add_session_result = exports.get_asana_queue = exports.get_practice_preview = exports.create_user = exports.handle_user_asana_img_upload = void 0;
+exports.rules_deploy = exports.get_fact = exports.update_user = exports.get_user = exports.add_session_result = exports.get_asana_queue = exports.get_practice_preview = exports.create_user = exports.handle_user_asana_img_upload = void 0;
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const asanas = require("./asanas");
@@ -91,6 +91,16 @@ exports.update_user = functions.https.onRequest(async (req, res) => {
         const { id, updates } = req.body;
         await handlers_1.update_user_model(id, updates);
         res.status(200).send('OK');
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
+});
+exports.get_fact = functions.https.onRequest(async (req, res) => {
+    try {
+        const fact = await handlers_1.create_fun_fact();
+        res.status(200).send(fact);
     }
     catch (err) {
         console.log(err);

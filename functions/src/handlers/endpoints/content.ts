@@ -46,8 +46,20 @@ export const addNewSession = async (id: string, sessionData: SessionModel ) => {
   const { sessions } = await repository.getUserModel(id);
   sessions.push({
     id: uid(),
-    date: Date.now(),
+    date: `${new Date().getFullYear()}-${(new Date().getMonth() + 1) > 9 ? (new Date().getMonth() + 1) : `0${(new Date().getMonth() + 1)}`}-${new Date().getDate() > 9 ? new Date().getDate() : `0${new Date().getDate()}`}`,
+    duration: sessionData.asanaQuantity * 45,
+    cal: sessionData.asanaQuantity * 10,
     ...sessionData
   });
   return { sessions };
+}
+
+export const createFact = () => {
+  const pos = Math.floor(Math.random() * Math.floor(3));
+  const facts = [
+    'Today in the West, Yoga is largely dominated by women. However, up until 1937 it was a male-only practice.',
+    'A practice of both physical, mental and spiritual nature, there are an estimated 300 million people partaking in Yoga as of today.',
+    'There is research suggesting Yoga, along with meditation, can help delay ageing.'
+  ];
+  return facts[pos];
 }

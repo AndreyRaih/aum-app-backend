@@ -1,6 +1,6 @@
 'use strict';
 
-import { addNewSession, getFullQueueFromFirebase, getQueuePreview, parseResultsForUpdates } from './endpoints/content';
+import { addNewSession, getFullQueueFromFirebase, getQueuePreview, parseResultsForUpdates, createFact } from './endpoints/content';
 import { createUserModel, getUserModel, updateUserModel } from './endpoints/user';
 import { analyseImg } from './storage';
 
@@ -21,7 +21,6 @@ export type UserModelUpdates = {
 }
 
 export type SessionModel = {
-  duration: number,
   asanaQuantity: number,
   userRange: number
 }
@@ -47,3 +46,7 @@ export const get_user_model = (id: string) => getUserModel(id);
 export const create_user_model = (id: string) => createUserModel(id);
 
 export const update_user_model = (id: string, updates: UserModelUpdates) => updateUserModel(id, updates);
+
+// Ither handlers
+
+export const create_fun_fact = () => createFact();
