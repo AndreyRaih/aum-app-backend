@@ -6,7 +6,7 @@ const user_1 = require("./endpoints/user");
 const storage_1 = require("./storage");
 // Image handlers
 exports.analyse_img = storage_1.analyseImg;
-exports.build_updates = (id, results) => content_1.parseResultsForUpdates(id, results);
+exports.build_updates = (results) => content_1.parseResultsForUpdates(results);
 // Queue handlers
 exports.practice_preview = () => content_1.getQueuePreview();
 exports.build_queue = () => content_1.getFullQueueFromFirebase();

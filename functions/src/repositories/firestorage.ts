@@ -10,9 +10,10 @@ export class AumFirestorageRepository {
     this.storage = new Storage();
     this.tmpFilesPathList = [];
   }
-  getFile (bucket, filename) {
-    const tmpPath = path.join(os.tmpdir(), filename);
-    return this.storage.bucket(bucket).file(filename).download({ destination: tmpPath }).then(() => {
+  getFile (bucket, filepath) {
+    const filename = filepath.split('/')[1];
+    const tmpPath = path.join(os.tmpdir(), `${filename}.jpeg`);
+    return this.storage.bucket(bucket).file(filepath).download({ destination: tmpPath }).then(() => {
       if (!this.tmpFilesPathList.includes(tmpPath)) this.tmpFilesPathList.push(tmpPath);
     }).then(() => tmpPath);
   }

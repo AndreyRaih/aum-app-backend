@@ -27,11 +27,10 @@ import { build_queue, analyse_img, create_user_model, get_user_model, update_use
  * which contain result of ts.poseNet, and patching exist model of user data
  */
 
-export const handle_user_asana_img_upload = functions.storage.object().onFinalize(async (file, context) => {
+export const handle_user_asana_img_upload = functions.storage.object().onFinalize(async (file) => {
   try {
-    const { uid: id } = context.auth;
-    const analyseResult: AnalyseResults | Error = await analyse_img(file);
-    const updates: UserModelUpdates = await build_updates(id, analyseResult as AnalyseResults);
+    const analyseResult = await analyse_img(file);
+    const { id, updates } = await build_updates(analyseResult as AnalyseResults);
     await update_user_model(id, updates);
   } catch (err) {
     console.log(err)

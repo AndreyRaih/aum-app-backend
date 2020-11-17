@@ -22,8 +22,9 @@ class AumFirebaseRepository {
     /**
      * @description Public method
      */
-    async getAsana({ name, block }) {
-        return this.db.collection('asanas').doc(block).get().then(doc => doc.data()[name]);
+    async getAsana({ id, block }) {
+        console.log(block);
+        return this.db.collection('asanas').doc(block).get().then(doc => (doc.data().value.find((asana) => asana.id === id) || {}));
     }
     /**
      * @description Public method

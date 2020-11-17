@@ -11,6 +11,7 @@ export interface IAnalyseResultItem {
 }
 
 export type AnalyseResults = {
+  id: string,
   name: string,
   block: string,
   result: Array<IAnalyseResultItem>
@@ -29,7 +30,7 @@ export type SessionModel = {
 
 export const analyse_img = analyseImg;
 
-export const build_updates = (id: string, results: AnalyseResults) => parseResultsForUpdates(id, results);
+export const build_updates = (results: AnalyseResults) => parseResultsForUpdates(results);
 
 // Queue handlers
 

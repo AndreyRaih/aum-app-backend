@@ -4,39 +4,40 @@ exports.PoseAnalyser = void 0;
 const firestorage_1 = require("../repositories/firestorage");
 const firebase_1 = require("../repositories/firebase");
 // Tensorflow
-const tfjs_node_1 = require("@tensorflow/tfjs-node");
-const posenet_1 = require("@tensorflow-models/posenet");
+const tf = require("@tensorflow/tfjs-node");
+const posenet = require("@tensorflow-models/posenet");
 // Image and canvas
 const canvas_1 = require("canvas");
 const canvas_2 = require("canvas");
 class PoseEstimator {
-    constructor({ bucket, filename }) {
+    constructor({ bucket, name }) {
         this.storageRepository = new firestorage_1.AumFirestorageRepository();
         this.bucket = bucket;
-        this.filename = filename;
+        this.filepath = name;
         this.keypoints = null;
         this.estimationFileTmpPath = null;
     }
     async getEstimation() {
         try {
-            this.estimationFileTmpPath = await this.storageRepository.getFile(this.bucket, this.filename);
+            this.estimationFileTmpPath = await this.storageRepository.getFile(this.bucket, this.filepath);
+            console.log('get file');
         }
         catch (err) {
             console.log(err.message);
             return new Error({ message: "File not found" });
         }
-        const rawKeypoints = await this._estimatePose(this.estimationFileTmpPath);
+        const rawKeypoints = await this._estimatePose();
         this.keypoints = await this._optimizeKeypoints(rawKeypoints);
         this.storageRepository.clearFilesTmp();
     }
     async _estimatePose() {
-        const net = await posenet_1.default.load({
+        const net = await posenet.load({
             architecture: 'ResNet50',
             outputStride: 32,
             quantBytes: 1
         });
         const canvas = this._buildCanvasWithImg();
-        const { keypoints } = await net.estimateSinglePose(tfjs_node_1.default.browser.fromPixels(canvas), {
+        const { keypoints } = await net.estimateSinglePose(tf.browser.fromPixels(canvas), {
             flipHorizontal: false
         });
         return keypoints;
@@ -52,8 +53,8 @@ class PoseEstimator {
         return canvas;
     }
     async _optimizeKeypoints(keypoints) {
-        const boundingBox = posenet_1.default.getBoundingBox(keypoints);
-        return _resizePose(boundingBox, keypoints);
+        const boundingBox = posenet.getBoundingBox(keypoints);
+        return this._resizePose(boundingBox, keypoints);
     }
     _resizePose(boundingBox, keypoints) {
         let newKeypoints = [].concat(keypoints);
@@ -68,24 +69,32 @@ class PoseAnalyser extends PoseEstimator {
     constructor(data) {
         super(data);
         this.firebaseRepository = new firebase_1.AumFirebaseRepository();
-        this.asana = this._buildAsanaBasicObjectByFilename(data.filename);
+        this.basic = this._buildBasicObjectByFilename(data.name);
     }
     async getAnalyse() {
         await this.getEstimation();
+        console.log('get file');
         if (!this.keypoints)
             return new Error('Something wrong with keypoints module. Please try again');
         const result = await this._analysePose();
-        return Object.assign(Object.assign({}, this.asana), { result });
+        return Object.assign(Object.assign({}, this.basic), { result });
     }
     async _analysePose() {
-        return this.firebaseRepository.getAsana(this.asana).then(rules => rules.map(rule => ({
+        const findObj = {
+            id: `${this.basic.name} ${this.basic.block}`.replace(new RegExp(' ', 'ig'), '_').toLowerCase(),
+            block: this.basic.block
+        };
+        console.log(findObj);
+        return this.firebaseRepository.getAsana(findObj).then((result) => result && result.rules ? result.rules.map(rule => ({
             chain: rule.line.join(', '),
             result: this._checkDiffByAngle(rule, this.keypoints)
-        })));
+        })) : []);
     }
-    _buildAsanaBasicObjectByFilename(filename) {
-        const [name, block] = filename.split('-');
+    _buildBasicObjectByFilename(filename) {
+        const [folder, file] = filename.split('/');
+        const [name, block] = file.split('-');
         return {
+            id: folder,
             name: name.replace(' ', '_'),
             block: block.split('.')[0]
         };

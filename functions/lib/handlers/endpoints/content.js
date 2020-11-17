@@ -18,13 +18,15 @@ exports.getQueuePreview = () => {
         cal: 240
     };
 };
-exports.parseResultsForUpdates = async (id, results) => {
+exports.parseResultsForUpdates = async (results) => {
+    const { id } = results;
+    console.log(results, id);
     let { recentResults, levels } = await repository.getUserModel(id);
     const lastSessionResultObj = {
         id: uid(),
         date: Date.now(),
         levelUpdates: {
-            [results.block]: results.result.every(chain => chain.isDone) ? levels[results.block]++ : levels[results.block]
+            [results.block]: results.result.every(chain => chain.isDone) ? levels[results.block] + 1 : levels[results.block]
         },
         resultModel: {
             asana: results.name,
@@ -36,8 +38,11 @@ exports.parseResultsForUpdates = async (id, results) => {
     recentResults.push(lastSessionResultObj.resultModel);
     levels = Object.assign(Object.assign({}, levels), lastSessionResultObj.levelUpdates);
     return {
-        recentResults,
-        levels
+        id,
+        updates: {
+            recentResults,
+            levels
+        }
     };
 };
 exports.addNewSession = async (id, sessionData) => {

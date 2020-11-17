@@ -19,13 +19,15 @@ export const getQueuePreview = () => {
   };
 };
 
-export const parseResultsForUpdates = async (id, results: AnalyseResults) => {
+export const parseResultsForUpdates = async (results: AnalyseResults) => {
+  const { id } = results;
+  console.log(results, id);
   let { recentResults, levels } = await repository.getUserModel(id);
   const lastSessionResultObj = {
     id: uid(),
     date: Date.now(),
     levelUpdates: {
-      [results.block]: results.result.every(chain => chain.isDone) ? levels[results.block]++ : levels[results.block]
+      [results.block]: results.result.every(chain => chain.isDone) ? levels[results.block] + 1 : levels[results.block]
     },
     resultModel: {
       asana: results.name,
@@ -37,8 +39,11 @@ export const parseResultsForUpdates = async (id, results: AnalyseResults) => {
   recentResults.push(lastSessionResultObj.resultModel);
   levels = { ...levels, ...lastSessionResultObj.levelUpdates };
   return {
-    recentResults,
-    levels
+    id,
+    updates: {
+      recentResults,
+      levels
+    }
   }
 }
 

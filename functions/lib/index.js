@@ -25,11 +25,10 @@ const handlers_1 = require("./handlers");
  * Triggers by firestorage segments. Needs for a parse users images, build models,
  * which contain result of ts.poseNet, and patching exist model of user data
  */
-exports.handle_user_asana_img_upload = functions.storage.object().onFinalize(async (file, context) => {
+exports.handle_user_asana_img_upload = functions.storage.object().onFinalize(async (file) => {
     try {
-        const { uid: id } = context.auth;
         const analyseResult = await handlers_1.analyse_img(file);
-        const updates = await handlers_1.build_updates(id, analyseResult);
+        const { id, updates } = await handlers_1.build_updates(analyseResult);
         await handlers_1.update_user_model(id, updates);
     }
     catch (err) {
