@@ -17,7 +17,7 @@
 
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-import * as asanas from './asanas';
+// import * as asanas from './data/asanas';
 admin.initializeApp()
 
 import { build_queue, analyse_img, create_user_model, get_user_model, update_user_model, build_updates, AnalyseResults, SessionModel, UserModelUpdates, practice_preview, add_session, create_fun_fact } from './handlers';
@@ -90,7 +90,7 @@ export const get_user = functions.https.onRequest(async (req, res) => {
   }
 });
 
-export const update_user = functions.https.onRequest(async (req: functions.https.Request, res) => {
+export const update_user = functions.https.onRequest(async (req, res) => {
   try {
     const { id, updates } = req.body;
     await update_user_model(id, updates);
@@ -111,6 +111,7 @@ export const get_fact = functions.https.onRequest(async (req, res) => {
   }
 });
 
+// OTHER:
 
 /* export const get_user_result = functions.https.onRequest(async (req, res) => {
   try {
@@ -120,7 +121,7 @@ export const get_fact = functions.https.onRequest(async (req, res) => {
     console.log(err);
     res.status(500).json(err);
   }
-}); */
+});
 
 export const rules_deploy = functions.https.onRequest(async (request, response) => {
   for (const [doc, value] of Object.entries(asanas.asanas)) {
@@ -128,3 +129,4 @@ export const rules_deploy = functions.https.onRequest(async (request, response) 
   };
   response.status(200);
 });
+ */

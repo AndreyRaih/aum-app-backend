@@ -15,10 +15,10 @@
  */
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.rules_deploy = exports.get_fact = exports.update_user = exports.get_user = exports.add_session_result = exports.get_asana_queue = exports.get_practice_preview = exports.create_user = exports.handle_user_asana_img_upload = void 0;
+exports.get_fact = exports.update_user = exports.get_user = exports.add_session_result = exports.get_asana_queue = exports.get_practice_preview = exports.create_user = exports.handle_user_asana_img_upload = void 0;
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const asanas = require("./asanas");
+// import * as asanas from './data/asanas';
 admin.initializeApp();
 const handlers_1 = require("./handlers");
 /**
@@ -105,21 +105,5 @@ exports.get_fact = functions.https.onRequest(async (req, res) => {
         console.log(err);
         res.status(500).json(err);
     }
-});
-/* export const get_user_result = functions.https.onRequest(async (req, res) => {
-  try {
-    const result = await get_result();
-    res.status(200).json(result);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
-  }
-}); */
-exports.rules_deploy = functions.https.onRequest(async (request, response) => {
-    for (const [doc, value] of Object.entries(asanas.asanas)) {
-        await admin.firestore().collection('asanas').doc(doc).set({ value });
-    }
-    ;
-    response.status(200);
 });
 //# sourceMappingURL=index.js.map

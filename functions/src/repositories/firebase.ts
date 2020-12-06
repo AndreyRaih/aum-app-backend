@@ -1,52 +1,46 @@
 import * as admin from 'firebase-admin';
 import { UserModelUpdates } from '../handlers';
+import { UserModel } from '../handlers/endpoints/user';
+import { ASANA_COLLECTION_NAME, USERS_COLLECTION_NAME } from '../utils/constants';
+
+interface IFindObject {
+  id: string,
+  block: string
+}
 
 export class AumFirebaseRepository {
   db: FirebaseFirestore.Firestore;
+  asanasCollection: FirebaseFirestore.CollectionReference;
+  usersCollection: FirebaseFirestore.CollectionReference;
   constructor() {
     this.db = admin.firestore();
+    this.asanasCollection = this.db.collection(ASANA_COLLECTION_NAME);
+    this.usersCollection = this.db.collection(USERS_COLLECTION_NAME);
   }
   /**
-   * @description Public method 
+   * Content methods
    */
   async getAllAsanas () {
-    return this.db.collection('asanas').get().then(snapshot => snapshot.docs.map(doc => ({ block: doc.id, ...doc.data() }))); 
+    const { docs } = await this.asanasCollection.get();
+    return docs.map(doc => ({ block: doc.id, ...doc.data() })); 
+  }
+  async getAsana({ id, block }: IFindObject) {
+    const blockSnapshot = await this.asanasCollection.doc(block).get();
+    const { value: list } = blockSnapshot.data();
+    const result = list.find(asana => asana.id === id) || {};
+    return result;
   }
   /**
-   * @description Public method 
+   * User methods
    */
-  async getAsana({ id, block }) {
-    return this.db.collection('asanas').doc(block).get().then(doc => (doc.data().value.find((asana) => asana.id === id) || {}));
-}
-  /**
-   * @description Public method 
-   */
-  async setUserResult (updates) {
-    const resultRef = this.db.collection('results_test_compare').doc('result_test');
-    const doc = await resultRef.get();
-    if (!doc.exists) {
-      await resultRef.set({ [`${updates.name}_${updates.block}`]: updates });
-    } else {
-      await resultRef.update({ [`${updates.name}_${updates.block}`]: updates });
-    }
-  }
-  /**
-   * @description Public method 
-   */
-  async setUserModel(id, data) {
-    const userRef = await this._getUserRef(id);
-    await userRef.set(data);
-  }
-  /**
-   * @description Public method 
-   */
-  async getUserModel (id) {
-    return this.db.collection('users').doc(id).get().then(snapshot => snapshot.data())
+  async getUserModel (id: string): Promise<UserModel> {
+    const userSnapshot = await this._getUserRef(id).get();
+    return userSnapshot.data() as UserModel;
   };
-
-  /**
-   * @description Public method 
-   */
+  async setUserModel(id: string, data: UserModel) {
+    const userRef = await this._getUserRef(id);
+    return userRef.set(data);
+  }
   async updateUserModel (id: string, updates: UserModelUpdates) {
     const userRef = await this._getUserRef(id);
     try {
@@ -59,9 +53,9 @@ export class AumFirebaseRepository {
     }
   }
   /**
-   * @description Private method
+   * Private methods
    */
-  _getUserRef (id) {
-    return this.db.collection('users').doc(id);
+  _getUserRef(id: string): FirebaseFirestore.DocumentReference {
+    return this.usersCollection.doc(id);
   }
 }

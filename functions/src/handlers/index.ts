@@ -1,5 +1,6 @@
 'use strict';
 
+import { ResultModel } from '../utils';
 import { addNewSession, getFullQueueFromFirebase, getQueuePreview, parseResultsForUpdates, createFact } from './endpoints/content';
 import { createUserModel, getUserModel, updateUserModel } from './endpoints/user';
 import { analyseImg } from './storage';
@@ -7,7 +8,7 @@ import { analyseImg } from './storage';
 export interface IAnalyseResultItem {
   chain: string,
   deg: any,
-  isDone: boolean
+  isDone: Boolean
 }
 
 export type AnalyseResults = {
@@ -26,11 +27,16 @@ export type SessionModel = {
   userRange: number
 }
 
+export interface IPoseResults {
+  id: string,
+  updates: ResultModel
+}
+
 // Image handlers
 
 export const analyse_img = analyseImg;
 
-export const build_updates = (results: AnalyseResults) => parseResultsForUpdates(results);
+export const build_updates = (results: AnalyseResults): Promise<IPoseResults> => parseResultsForUpdates(results);
 
 // Queue handlers
 

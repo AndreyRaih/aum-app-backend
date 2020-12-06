@@ -86,7 +86,7 @@ export class PoseAnalyser extends PoseEstimator {
     }
     return this.firebaseRepository.getAsana(findObj).then((result) => result && result.rules ? result.rules.map(rule => ({
       chain: rule.line.join(', '),
-      result: this._checkDiffByAngle(rule, this.keypoints)
+      ...this._checkDiffByAngle(rule, this.keypoints)
     })) : []);
   }
 

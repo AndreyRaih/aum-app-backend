@@ -84,11 +84,7 @@ class PoseAnalyser extends PoseEstimator {
             id: `${this.basic.name} ${this.basic.block}`.replace(new RegExp(' ', 'ig'), '_').toLowerCase(),
             block: this.basic.block
         };
-        console.log(findObj);
-        return this.firebaseRepository.getAsana(findObj).then((result) => result && result.rules ? result.rules.map(rule => ({
-            chain: rule.line.join(', '),
-            result: this._checkDiffByAngle(rule, this.keypoints)
-        })) : []);
+        return this.firebaseRepository.getAsana(findObj).then((result) => result && result.rules ? result.rules.map(rule => (Object.assign({ chain: rule.line.join(', ') }, this._checkDiffByAngle(rule, this.keypoints)))) : []);
     }
     _buildBasicObjectByFilename(filename) {
         const [folder, file] = filename.split('/');

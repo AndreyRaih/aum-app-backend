@@ -1,0 +1,1 @@
+{"version":3,"file":"practices.js","sourceRoot":"","sources":["../../src/data/practices.ts"],"names":[],"mappings":";;AAAA,kBAAe;IACb;QACE,IAAI,EAAE,wBAAwB;QAC9B,WAAW,EAAE,+IAA+I;QAC5J,QAAQ,EAAE;YACR,UAAU;YACV,UAAU;SACX;QACD,IAAI,EAAE,IAAI;QACV,GAAG,EAAE,GAAG;KACT;CACF,CAAA"}
