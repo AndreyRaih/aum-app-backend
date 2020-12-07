@@ -42,10 +42,18 @@ export class AumFirebaseRepository {
     return userRef.set(data);
   }
   async updateUserModel (id: string, updates: UserModelUpdates) {
+    console.log(`logged updates: ${updates}`);
     const userRef = await this._getUserRef(id);
     try {
       for await (const [key, value] of Object.entries(updates)) {
-        await userRef.update({[`${key}`]: value});
+        if (typeof value === 'object') {
+          const instance = await userRef.get();
+          const basicObject = instance.data()[`${key}`];
+          const merged = {...basicObject, ...value };
+          await userRef.update({[`${key}`]: merged});
+        } else {
+          await userRef.update({[`${key}`]: value});
+        }
       };
       return Promise.resolve();
     } catch (error) {
