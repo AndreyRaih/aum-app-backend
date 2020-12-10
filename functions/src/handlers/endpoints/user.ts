@@ -21,7 +21,6 @@ export interface IOnboarding {
   introduction: Boolean,
   concept: Boolean,
   player: Boolean,
-  progress: Boolean
 }
 export interface ILevels {
   standing: Number,
@@ -56,8 +55,7 @@ export const createUserModel = (id: string) => {
     onboardingComplete: {
       introduction: false,
       concept: false,
-      player: false,
-      progress: false
+      player: false
     },
     recentResults: [],
     sessions: []

@@ -17,8 +17,7 @@ exports.createUserModel = (id) => {
         onboardingComplete: {
             introduction: false,
             concept: false,
-            player: false,
-            progress: false
+            player: false
         },
         recentResults: [],
         sessions: []
