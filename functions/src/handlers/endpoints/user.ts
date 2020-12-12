@@ -18,7 +18,6 @@ export interface ISession {
 }
 
 export interface IOnboarding {
-  introduction: Boolean,
   concept: Boolean,
   player: Boolean,
 }
@@ -53,7 +52,6 @@ export const createUserModel = (id: string) => {
       lying_back: 1
     },
     onboardingComplete: {
-      introduction: false,
       concept: false,
       player: false
     },
