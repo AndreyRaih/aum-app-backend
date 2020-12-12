@@ -15,7 +15,6 @@ exports.createUserModel = (id) => {
             lying_back: 1
         },
         onboardingComplete: {
-            introduction: false,
             concept: false,
             player: false
         },
