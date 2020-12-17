@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const lying_back_1 = [
 /* {
   id: 'right_twist_lying_back_1',
@@ -272,7 +274,7 @@ const balances_1 = [
             { voice: 'female', isShort: false, src: 'gs://aum-app-audio/utthita_bhujangasana_balances_1/female_full.mp3' },
             { voice: 'female', isShort: true, src: 'gs://aum-app-audio/utthita_bhujangasana_balances_1/female_short.mp3' }
         ],
-        level: 2,
+        level: 1,
         isCheck: false
     },
     // need tree
@@ -447,7 +449,7 @@ const standing_2 = [
         isCheck: false
     },
 ];
-exports.asanas = {
+exports.default = {
     lying_back_1,
     lying_back_2,
     lying_forward_1,

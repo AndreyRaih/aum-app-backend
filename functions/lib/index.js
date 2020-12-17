@@ -44,7 +44,11 @@ exports.create_user = functions.auth.user().onCreate(({ uid: id }) => handlers_1
  */
 exports.get_practice_preview = functions.https.onRequest(async (req, res) => {
     try {
-        const preview = await handlers_1.practice_preview();
+        const { id } = req.query;
+        if (!id) {
+            res.status(400).send(new Error('Invalid request. User ID is required'));
+        }
+        const preview = await handlers_1.practice_preview(id);
         res.status(200).json(preview);
     }
     catch (err) {
@@ -54,7 +58,11 @@ exports.get_practice_preview = functions.https.onRequest(async (req, res) => {
 });
 exports.get_asana_queue = functions.https.onRequest(async (req, res) => {
     try {
-        const queue = await handlers_1.build_queue();
+        const { blocks } = req.body;
+        if (!blocks) {
+            res.status(400).send(new Error('Invalid request. Blocks is required'));
+        }
+        const queue = await handlers_1.build_queue(blocks);
         res.status(200).json(queue);
     }
     catch (err) {

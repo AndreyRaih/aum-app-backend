@@ -21,6 +21,7 @@ export interface IOnboarding {
   concept: Boolean,
   player: Boolean,
 }
+
 export interface ILevels {
   standing: Number,
   sitting: Number,

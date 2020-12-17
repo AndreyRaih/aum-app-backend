@@ -1,4 +1,5 @@
 import * as admin from 'firebase-admin';
+import { IBlock } from '../data/practices';
 import { UserModelUpdates } from '../handlers';
 import { UserModel } from '../handlers/endpoints/user';
 import { ASANA_COLLECTION_NAME, USERS_COLLECTION_NAME } from '../utils/constants';
@@ -8,28 +9,38 @@ interface IFindObject {
   block: string
 }
 
+interface IQueueItem {
+  block: string,
+  value: any[]
+}
+
 export class AumFirebaseRepository {
   db: FirebaseFirestore.Firestore;
   asanasCollection: FirebaseFirestore.CollectionReference;
   usersCollection: FirebaseFirestore.CollectionReference;
+  
   constructor() {
     this.db = admin.firestore();
     this.asanasCollection = this.db.collection(ASANA_COLLECTION_NAME);
     this.usersCollection = this.db.collection(USERS_COLLECTION_NAME);
   }
+
   /**
    * Content methods
    */
-  async getAllAsanas () {
+  async getAsanas (blocks: string[]) {
     const { docs } = await this.asanasCollection.get();
-    return docs.map(doc => ({ block: doc.id, ...doc.data() })); 
+    const queue = docs.map(doc => ({ block: doc.id, ...doc.data() } as IQueueItem));
+    return blocks.map(block => queue.find(item => item.block === block));
   }
+
   async getAsana({ id, block }: IFindObject) {
     const blockSnapshot = await this.asanasCollection.doc(block).get();
     const { value: list } = blockSnapshot.data();
     const result = list.find(asana => asana.id === id) || {};
     return result;
   }
+
   /**
    * User methods
    */
@@ -37,10 +48,12 @@ export class AumFirebaseRepository {
     const userSnapshot = await this._getUserRef(id).get();
     return userSnapshot.data() as UserModel;
   };
+
   async setUserModel(id: string, data: UserModel) {
     const userRef = await this._getUserRef(id);
     return userRef.set(data);
   }
+
   async updateUserModel (id: string, updates: UserModelUpdates) {
     console.log(`logged updates: ${updates}`);
     const userRef = await this._getUserRef(id);
@@ -60,6 +73,7 @@ export class AumFirebaseRepository {
       return Promise.reject(error);
     }
   }
+
   /**
    * Private methods
    */

@@ -333,7 +333,7 @@ const balances_1 = [
       { voice: 'female', isShort: false, src: 'gs://aum-app-audio/utthita_bhujangasana_balances_1/female_full.mp3' },
       { voice: 'female', isShort: true, src: 'gs://aum-app-audio/utthita_bhujangasana_balances_1/female_short.mp3' }
     ],
-    level: 2,
+    level: 1,
     isCheck: false
   },
   // need tree
@@ -554,7 +554,7 @@ const standing_2 = [
   } */
 ]
 
-exports.asanas = {
+export default {
   lying_back_1,
   lying_back_2,
   lying_forward_1,

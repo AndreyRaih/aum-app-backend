@@ -21,6 +21,7 @@ import * as admin from 'firebase-admin';
 admin.initializeApp()
 
 import { build_queue, analyse_img, create_user_model, get_user_model, update_user_model, build_updates, AnalyseResults, SessionModel, UserModelUpdates, practice_preview, add_session, create_fun_fact } from './handlers';
+import { IBlock } from './data/practices';
 
 /**
  * Triggers by firestorage segments. Needs for a parse users images, build models,
@@ -49,7 +50,11 @@ export const create_user = functions.auth.user().onCreate(({ uid: id }) => creat
 
 export const get_practice_preview = functions.https.onRequest(async (req, res) => {
   try {
-    const preview = await practice_preview();
+    const { id } = req.query;
+    if (!id) {
+      res.status(400).send(new Error('Invalid request. User ID is required'));
+    }
+    const preview = await practice_preview(id as string);
     res.status(200).json(preview);
   } catch (err) {
     console.log(err);
@@ -59,7 +64,11 @@ export const get_practice_preview = functions.https.onRequest(async (req, res) =
 
 export const get_asana_queue = functions.https.onRequest(async (req, res) => {
   try {
-    const queue = await build_queue();
+    const { blocks } = req.body;
+    if (!blocks) {
+      res.status(400).send(new Error('Invalid request. Blocks is required'));
+    }
+    const queue = await build_queue(blocks);
     res.status(200).json(queue);
   } catch (err) {
     console.log(err);

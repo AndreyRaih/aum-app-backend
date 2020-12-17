@@ -1,7 +1,7 @@
 'use strict';
 
 import { ResultModel } from '../utils';
-import { addNewSession, getFullQueueFromFirebase, getQueuePreview, parseResultsForUpdates, createFact } from './endpoints/content';
+import { addNewSession, getQueueFromFirebase, getQueuePreview, parseResultsForUpdates, createFact } from './endpoints/content';
 import { createUserModel, getUserModel, updateUserModel } from './endpoints/user';
 import { analyseImg } from './storage';
 
@@ -40,9 +40,9 @@ export const build_updates = (results: AnalyseResults): Promise<IPoseResults> =>
 
 // Queue handlers
 
-export const practice_preview = () => getQueuePreview();
+export const practice_preview = (id: string) => getQueuePreview(id);
 
-export const build_queue = () => getFullQueueFromFirebase();
+export const build_queue = (blocks: string[]) => getQueueFromFirebase(blocks);
 
 export const add_session = (id: string, data: SessionModel) => addNewSession(id, data);
 

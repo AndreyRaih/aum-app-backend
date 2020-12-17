@@ -19,9 +19,10 @@ class AumFirebaseRepository {
     /**
      * Content methods
      */
-    async getAllAsanas() {
+    async getAsanas(blocks) {
         const { docs } = await this.asanasCollection.get();
-        return docs.map(doc => (Object.assign({ block: doc.id }, doc.data())));
+        const queue = docs.map(doc => (Object.assign({ block: doc.id }, doc.data())));
+        return blocks.map(block => queue.find(item => item.block === block));
     }
     async getAsana({ id, block }) {
         const blockSnapshot = await this.asanasCollection.doc(block).get();

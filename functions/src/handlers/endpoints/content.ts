@@ -4,15 +4,29 @@ import { AumFirebaseRepository } from '../../repositories/firebase';
 import { formatDateToString, buildResultObject, ResultModel } from '../../utils';
 import { UserModel } from './user';
 import facts from '../../data/facts';
-import practices from '../../data/practices';
+import practices, { IPractice } from '../../data/practices';
 
 const repository = new AumFirebaseRepository();
 
-export const getFullQueueFromFirebase = () => repository.getAllAsanas()
+export const getQueueFromFirebase = (blocks: string[]) => repository.getAsanas(blocks)
 
-export const getQueuePreview = () => {
-  /* TODO: Add implement of practice constructor */
-  return practices[0];
+export const getQueuePreview = async (id: string): Promise<IPractice> => {
+  const user: UserModel = await repository.getUserModel(id);
+  const practice: IPractice = practices[0];
+  const userQueue = practice.blocks.map(block => {
+    const userLevel = user.levels[block.name];
+    if (!userLevel) {
+      throw new Error(`[getQueuePreview]: Something wrong, block with name "${block.name}" doesn't exist!`);
+    }
+    if (block.level <= userLevel) {
+      return `${block.name}_${block.level}`;
+    } else if (userLevel >= block.minLevel) {
+      return `${block.name}_${userLevel}`
+    } else {
+      return null;
+    }
+  }).filter(block => Boolean(block));
+  return { ...practice, userQueue };
 };
 
 export const parseResultsForUpdates = async (results: AnalyseResults) => {

@@ -8,8 +8,8 @@ const storage_1 = require("./storage");
 exports.analyse_img = storage_1.analyseImg;
 exports.build_updates = (results) => content_1.parseResultsForUpdates(results);
 // Queue handlers
-exports.practice_preview = () => content_1.getQueuePreview();
-exports.build_queue = () => content_1.getFullQueueFromFirebase();
+exports.practice_preview = (id) => content_1.getQueuePreview(id);
+exports.build_queue = (blocks) => content_1.getQueueFromFirebase(blocks);
 exports.add_session = (id, data) => content_1.addNewSession(id, data);
 // User handlers
 exports.get_user_model = (id) => user_1.getUserModel(id);
