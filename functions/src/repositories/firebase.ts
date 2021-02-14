@@ -59,10 +59,13 @@ export class AumFirebaseRepository {
     const userRef = await this._getUserRef(id);
     try {
       for await (const [key, value] of Object.entries(updates)) {
-        if (typeof value === 'object') {
-          const instance = await userRef.get();
-          const basicObject = instance.data()[`${key}`];
+        const instance = await userRef.get();
+        const basicObject = instance.data()[`${key}`];
+        if (typeof value === 'object' && !Array.isArray(value)) {
           const merged = {...basicObject, ...value };
+          await userRef.update({[`${key}`]: merged});
+        } else if (typeof value === 'object' && Array.isArray(value)) {
+          const merged = [...basicObject, ...value ];
           await userRef.update({[`${key}`]: merged});
         } else {
           await userRef.update({[`${key}`]: value});

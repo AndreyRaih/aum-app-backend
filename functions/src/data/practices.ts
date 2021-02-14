@@ -12,7 +12,8 @@ export interface IPractice {
   cal: number,
   benefits: string[],
   blocks: IBlock[],
-  userQueue: string[]
+  userQueue: string[],
+  descriptionImg: string
 }
 
 export default <IPractice[]>[
@@ -30,7 +31,7 @@ export default <IPractice[]>[
       'Balancing and deep breathing should reduce your level of cortisol, and due to this your mood should be better',
       'Your body now is a enough stretch for a more powerful exercises'
     ],
-    blocks: [
+    /* blocks: [
       { name: 'sitting', level: 1, minLevel: 1 },
       { name: 'standing', level: 1, minLevel: 1 },
       { name: 'balances', level: 1, minLevel: 1 },
@@ -39,6 +40,19 @@ export default <IPractice[]>[
       { name: 'sitting', level: 1, minLevel: 1 },
       { name: 'lying_forward', level: 1, minLevel: 1 },
       { name: 'lying_back', level: 1, minLevel: 1 }
-    ]
+    ] */
+    blocks: [
+      { name: 'sitting', level: 1, minLevel: 1 },
+      { name: 'sitting', level: 2, minLevel: 1 },
+      { name: 'standing', level: 1, minLevel: 1 },
+      { name: 'standing', level: 2, minLevel: 1 },
+      { name: 'balances', level: 1, minLevel: 1 },
+      { name: 'balances', level: 2, minLevel: 1 },
+      { name: 'lying_forward', level: 1, minLevel: 1 },
+      { name: 'lying_forward', level: 2, minLevel: 1 },
+      { name: 'lying_back', level: 1, minLevel: 1 },
+      { name: 'lying_back', level: 2, minLevel: 1 }
+    ],
+    descriptionImg: 'https://images.unsplash.com/photo-1593810451137-5dc55105dace?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=2852&q=80'
   }
 ]

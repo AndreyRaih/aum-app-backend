@@ -17,11 +17,9 @@
 
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-// import * as asanas from './data/asanas';
 admin.initializeApp()
 
 import { build_queue, analyse_img, create_user_model, get_user_model, update_user_model, build_updates, AnalyseResults, SessionModel, UserModelUpdates, practice_preview, add_session, create_fun_fact } from './handlers';
-import { IBlock } from './data/practices';
 
 /**
  * Triggers by firestorage segments. Needs for a parse users images, build models,
@@ -119,23 +117,3 @@ export const get_fact = functions.https.onRequest(async (req, res) => {
     res.status(500).json(err);
   }
 });
-
-// OTHER:
-
-/* export const get_user_result = functions.https.onRequest(async (req, res) => {
-  try {
-    const result = await get_result();
-    res.status(200).json(result);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
-  }
-});
-
-export const rules_deploy = functions.https.onRequest(async (request, response) => {
-  for (const [doc, value] of Object.entries(asanas.asanas)) {
-    await admin.firestore().collection('asanas').doc(doc).set({ value });
-  };
-  response.status(200);
-});
- */
