@@ -1,20 +1,8 @@
 import * as admin from 'firebase-admin';
-import { IBlock } from '../data/practices';
-import { UserModelUpdates } from '../handlers';
-import { UserModel } from '../handlers/endpoints/user';
-import { ASANA_COLLECTION_NAME, USERS_COLLECTION_NAME } from '../utils/constants';
+import { AumFirebase, AumRepository, IUserModelUpdates, UserModel } from './typings';
+import { ASANA_COLLECTION_NAME, USERS_COLLECTION_NAME } from './utils/constants';
 
-interface IFindObject {
-  id: string,
-  block: string
-}
-
-interface IQueueItem {
-  block: string,
-  value: any[]
-}
-
-export class AumFirebaseRepository {
+export class AumFirebaseRepository implements AumRepository {
   db: FirebaseFirestore.Firestore;
   asanasCollection: FirebaseFirestore.CollectionReference;
   usersCollection: FirebaseFirestore.CollectionReference;
@@ -27,24 +15,36 @@ export class AumFirebaseRepository {
 
   /**
    * Content methods
-   */
-  async getAsanas (blocks: string[]) {
-    const { docs } = await this.asanasCollection.get();
-    const queue = docs.map(doc => ({ block: doc.id, ...doc.data() } as IQueueItem));
-    return blocks.map(block => queue.find(item => item.block === block));
+  */
+
+  async getAsanaList (blocks: string[]) {
+    try {
+      const { docs } = await this.asanasCollection.get();
+      return docs
+        .map(doc => ({ block: doc.id, ...doc.data()} as AumFirebase.AsanaBlockItem))
+        .filter(({block}) => blocks.includes(block));
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
 
-  async getAsana({ id, block }: IFindObject) {
-    const blockSnapshot = await this.asanasCollection.doc(block).get();
-    const { value: list } = blockSnapshot.data();
-    const result = list.find(asana => asana.id === id) || {};
-    return result;
+  async getAsana({ id, block }: AumFirebase.AsanaBlockQuery) {
+    try {
+      const blockSnapshot = await this.asanasCollection.doc(block).get();
+      const { value: list } = blockSnapshot.data();
+      return list.find(asana => asana.id === id) || null;
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
   }
 
   /**
    * User methods
-   */
-  async getUserModel (id: string): Promise<UserModel> {
+  */
+
+  async getUserModel (id: string) {
     const userSnapshot = await this._getUserRef(id).get();
     return userSnapshot.data() as UserModel;
   };
@@ -54,7 +54,7 @@ export class AumFirebaseRepository {
     return userRef.set(data);
   }
 
-  async updateUserModel (id: string, updates: UserModelUpdates) {
+  async updateUserModel (id: string, updates: IUserModelUpdates) {
     console.log(`logged updates: ${updates}`);
     const userRef = await this._getUserRef(id);
     try {
@@ -80,7 +80,7 @@ export class AumFirebaseRepository {
   /**
    * Private methods
    */
-  _getUserRef(id: string): FirebaseFirestore.DocumentReference {
+  private _getUserRef(id: string): FirebaseFirestore.DocumentReference {
     return this.usersCollection.doc(id);
   }
 }

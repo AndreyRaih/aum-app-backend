@@ -1,18 +1,18 @@
 import * as uid from 'uid/dist/index';
-import { AnalyseResults, SessionModel } from '../index';
-import { AumFirebaseRepository } from '../../repositories/firebase';
-import { formatDateToString, buildResultObject, ResultModel } from '../../utils';
-import { UserModel } from './user';
+import { AumFirebaseRepository } from '../../firebase-repository';
+import { formatDateToString, buildResultObject } from '../../utils';
 import facts from '../../data/facts';
-import practices, { IPractice } from '../../data/practices';
+import practices from '../../data/practices';
+import { IUserModelLinkedUpdates, IUserResultUpdates, IUserSession, UserModel } from '../../typings/user';
+import { AumApiHandlers, AumFirebase, Practice, PracticeFeedback } from '../../typings';
 
 const repository = new AumFirebaseRepository();
 
-export const getQueueFromFirebase = (blocks: string[]) => repository.getAsanas(blocks)
+export const getQueueFromFirebase = (blocks: string[]): Promise<AumFirebase.AsanaBlockItem[]> => repository.getAsanaList(blocks)
 
-export const getQueuePreview = async (id: string): Promise<IPractice> => {
+export const getQueuePreview = async (id: string): Promise<Practice> => {
   const user: UserModel = await repository.getUserModel(id);
-  const practice: IPractice = practices[0];
+  const practice: Practice = practices[0];
   const userQueue = practice.blocks.map(block => {
     const userLevel = user.levels[block.name];
     if (!userLevel) {
@@ -29,17 +29,16 @@ export const getQueuePreview = async (id: string): Promise<IPractice> => {
   return { ...practice, userQueue };
 };
 
-export const parseResultsForUpdates = async (results: AnalyseResults) => {
-  const { id } = results;
+export const parseResultsForUpdates = async ({ id, estimations}: AumApiHandlers.IApplyAsanaEstimations): Promise<IUserModelLinkedUpdates> => {
   const user: UserModel = await repository.getUserModel(id);
-  const updates: ResultModel = buildResultObject(user, results);
+  const updates: IUserResultUpdates = buildResultObject(user, estimations);
   return {
     id,
     updates
   }
 }
 
-export const addNewSession = async (id: string, sessionData: SessionModel ) => {
+export const addNewSession = async (id: string, sessionData: PracticeFeedback ): Promise<{ sessions: IUserSession[] }> => {
   const { sessions } = await repository.getUserModel(id);
   sessions.push({
     id: uid(),
@@ -51,7 +50,7 @@ export const addNewSession = async (id: string, sessionData: SessionModel ) => {
   return { sessions };
 }
 
-export const createFact = () => {
+export const createFact = (): string => {
   const pos = Math.floor(Math.random() * Math.floor(3));
   return facts[pos];
 }

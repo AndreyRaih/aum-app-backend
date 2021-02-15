@@ -1,20 +1,4 @@
-export interface IBlock {
-  name: string,
-  level: number,
-  minLevel: number
-}
-
-export interface IPractice {
-  name: string,
-  description: string,
-  accents: string[],
-  time: number,
-  cal: number,
-  benefits: string[],
-  blocks: IBlock[],
-  userQueue: string[],
-  descriptionImg: string
-}
+import { IPractice } from "../typings/practice";
 
 export default <IPractice[]>[
   {

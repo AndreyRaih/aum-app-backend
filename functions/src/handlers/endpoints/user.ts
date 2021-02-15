@@ -1,43 +1,5 @@
-import { IAnalyseResultItem, UserModelUpdates } from '..';
-import { AumFirebaseRepository } from '../../repositories/firebase';
-
-export interface IResult {
-  asana: string,
-  block: string,
-  doneEntries: IAnalyseResultItem[],
-  failures: IAnalyseResultItem[]
-}
-
-export interface ISession {
-  id: NonNullable<string>,
-  userRange: Number,
-  asanaQuantity: Number,
-  date: string,
-  duration: Number,
-  cal: Number,
-}
-
-export interface IOnboarding {
-  concept: Boolean,
-  player: Boolean,
-}
-
-export interface ILevels {
-  standing: Number,
-  sitting: Number,
-  balances: Number,
-  lying_forward: Number,
-  lying_back: Number
-}
-
-export type UserModel = {
-  id: NonNullable<string>,
-  name: string,
-  levels: ILevels,
-  onboardingComplete: IOnboarding,
-  recentResults: IResult[],
-  sessions: ISession[]
-}
+import { AumFirebaseRepository } from '../../firebase-repository';
+import { IUserModelUpdates, UserModel } from '../../typings/user';
 
 const repository = new AumFirebaseRepository();
 
@@ -64,4 +26,4 @@ export const createUserModel = (id: string) => {
 
 export const getUserModel = (id: string) => repository.getUserModel(id);
 
-export const updateUserModel = (id: string, updates: UserModelUpdates) => repository.updateUserModel(id, updates);
+export const updateUserModel = (id: string, updates: IUserModelUpdates) => repository.updateUserModel(id, updates);
