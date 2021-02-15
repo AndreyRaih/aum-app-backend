@@ -1,6 +1,6 @@
-import { IPractice } from "../typings/practice";
+import { Practice } from "../typings";
 
-export default <IPractice[]>[
+export default <Practice[]>[
   {
     name: 'Stress relief',
     description: "Softly practice, with an accent on balances should help you to decrease a daily stress level. It's a better solution after long working day.",
