@@ -1,5 +1,5 @@
 import { PoseEstimationObject } from "../typings";
-import { IUserResultUpdates, UserModel } from "../typings/user";
+import { IUserLevels, IUserResult, IUserResultUpdates, UserModel } from "../typings/user";
 
 export function formatDateToString(date: Date): string {
   const normalizeValue = (value: Number): string => value > 9 ? value.toString() : `0${value}`
@@ -10,20 +10,20 @@ export function buildResultObject(user: UserModel, estimation: PoseEstimationObj
   const { recentResults: existRecentResults, levels: existLevels } = user;
   const { name, block ,result } = estimation;
   // Build level updates
-  const updatedBlockName = Object.keys(existLevels).find(block => block.includes(block));
-  const isShouldUpdate = result.every(chain => chain.isDone);
-  const levels = { 
+  const updatedBlockName: string = Object.keys(existLevels).find(level => block.includes(level));
+  const isShouldUpdate: boolean = result.every(chain => chain.isDone);
+  const levels: IUserLevels = { 
     ...existLevels,
     [updatedBlockName]: isShouldUpdate ? existLevels[updatedBlockName] + 1 : existLevels[updatedBlockName]
   };
   // Build recent results updates
-  const newResult = {
+  const newResult: IUserResult = {
     asana: name,
     block: block,
     doneEntries: result.filter(entry => entry.isDone),
     failures: result.filter(entry => !entry.isDone)
   };
-  const recentResults = [...existRecentResults];
+  const recentResults: IUserResult[] = [...existRecentResults];
   recentResults.push(newResult);
   return {
     recentResults,

@@ -1,4 +1,3 @@
-import { IUserModelUpdates, PracticeFeedback } from '../typings';
 export { 
   addNewSession as add_session,
   getQueueFromFirebase as build_queue,

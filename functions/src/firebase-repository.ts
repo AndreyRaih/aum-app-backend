@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin';
-import { AsanaItem, AumFirebase, AumRepository, IUserModelUpdates, UserModel } from './typings';
+import { AumFirebase, AumRepository, IUserModelUpdates, UserModel } from './typings';
 import { ASANA_COLLECTION_NAME, USERS_COLLECTION_NAME } from './utils/constants';
 
 export class AumFirebaseRepository implements AumRepository {
