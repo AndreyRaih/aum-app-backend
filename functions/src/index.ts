@@ -29,7 +29,7 @@ import {
   create_fun_fact,
   parse_results_for_updates
 } from './handlers';
-import { AumApiHandlers, IUserModelLinkedUpdates, IUserModelUpdates, IUserResultUpdates } from './typings';
+import { AumApiHandlers, AumFirebase, IUserModelLinkedUpdates, IUserModelUpdates } from './typings';
 
 /**
  * Firestorage riggers;
@@ -43,6 +43,9 @@ export const create_user = functions.auth.user().onCreate(({ uid: id }: admin.au
 
 // USER:
 
+/**
+ * @description `GET` method
+ */
 export const get_user = functions.https.onRequest(async (req, res) => {
   try {
     const { id } = req.query;
@@ -57,6 +60,9 @@ export const get_user = functions.https.onRequest(async (req, res) => {
   }
 });
 
+/**
+ * @description `POST` method
+ */
 export const update_user = functions.https.onRequest(async (req, res) => {
   try {
     const { id, updates } = req.body as AumApiHandlers.IUpdateUser;
@@ -71,6 +77,9 @@ export const update_user = functions.https.onRequest(async (req, res) => {
   }
 });
 
+/**
+ * @description `POST` method
+ */
 export const apply_asana_estimations = functions.https.onRequest(async (req, res) => {
   try {
     const estimation = req.body as AumApiHandlers.IApplyAsanaEstimations;
@@ -88,6 +97,9 @@ export const apply_asana_estimations = functions.https.onRequest(async (req, res
 
 // CONTENT:
 
+/**
+ * @description `GET` method
+ */
 export const get_practice_preview = functions.https.onRequest(async (req, res) => {
   try {
     const { id } = req.query;
@@ -102,13 +114,16 @@ export const get_practice_preview = functions.https.onRequest(async (req, res) =
   }
 });
 
+/**
+ * @description `POST` method
+ */
 export const get_asana_queue = functions.https.onRequest(async (req, res) => {
   try {
     const { blocks } = req.body as AumApiHandlers.IGetAsanaQueue;
     if (!blocks) {
       res.status(400).send(new Error('Invalid request. Blocks is required'));
     }
-    const queue = await build_queue(blocks);
+    const queue: AumFirebase.AsanaBlockItem[] = await build_queue(blocks);
     res.status(200).json(queue);
   } catch (err) {
     console.log(err);
@@ -116,6 +131,9 @@ export const get_asana_queue = functions.https.onRequest(async (req, res) => {
   }
 });
 
+/**
+ * @description `POST` method
+ */
 export const add_session_result = functions.https.onRequest(async (req, res) => {
   try {
     const { id, session } = req.body as AumApiHandlers.IAddSessionResult;
@@ -133,6 +151,9 @@ export const add_session_result = functions.https.onRequest(async (req, res) => 
 
 // OTHER
 
+/**
+ * @description `GET` method
+ */
 export const get_fact = functions.https.onRequest(async (req, res) => {
   try {
     const fact = await create_fun_fact();

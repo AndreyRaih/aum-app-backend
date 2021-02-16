@@ -36,3 +36,32 @@ export type PracticeFeedback = {
   asanaQuantity: number,
   userRange: number
 }
+
+// ASANA:
+
+export interface IAsanaAudio {
+  voice: 'male' | 'female',
+  isShort: boolean,
+  src: string
+}
+
+export interface IAsanaRule {
+  line: string[],
+  angle: number,
+  offset: { 
+    min: number,
+    max: number
+  }
+}
+
+export type AsanaItem = {
+  id: string,
+  name: string,
+  block: string,
+  level: number,
+  isCheck: boolean,
+  rules?: IAsanaRule[],
+  src: string,
+  audioSources: IAsanaAudio[],
+  captureTime: number
+}

@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin';
-import { AumFirebase, AumRepository, IUserModelUpdates, UserModel } from './typings';
+import { AsanaItem, AumFirebase, AumRepository, IUserModelUpdates, UserModel } from './typings';
 import { ASANA_COLLECTION_NAME, USERS_COLLECTION_NAME } from './utils/constants';
 
 export class AumFirebaseRepository implements AumRepository {
@@ -17,7 +17,7 @@ export class AumFirebaseRepository implements AumRepository {
    * Content methods
   */
 
-  async getAsanaList (blocks: string[]) {
+  async getAsanaList (blocks: string[]): Promise<AumFirebase.AsanaBlockItem[]> {
     try {
       const { docs } = await this.asanasCollection.get();
       return docs
@@ -29,7 +29,7 @@ export class AumFirebaseRepository implements AumRepository {
     }
   }
 
-  async getAsana({ id, block }: AumFirebase.AsanaBlockQuery) {
+  async getAsana({ id, block }: AumFirebase.AsanaBlockQuery): Promise<AumFirebase.AsanaBlockItem> {
     try {
       const blockSnapshot = await this.asanasCollection.doc(block).get();
       const { value: list } = blockSnapshot.data();

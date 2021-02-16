@@ -1,3 +1,4 @@
+import { AsanaItem } from "./content";
 import { IUserModelUpdates, UserModel } from "./user";
 
 declare namespace AumFirebase {
@@ -8,7 +9,7 @@ declare namespace AumFirebase {
   
   export type AsanaBlockItem = {
     block: string,
-    value: any[]
+    value: AsanaItem[]
   }
 }
 
