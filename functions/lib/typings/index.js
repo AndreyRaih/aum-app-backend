@@ -13,5 +13,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./user.d"), exports);
 __exportStar(require("./firebase-repository.d"), exports);
 __exportStar(require("./content.d"), exports);
-__exportStar(require("./handlers.d"), exports);
 //# sourceMappingURL=index.js.map

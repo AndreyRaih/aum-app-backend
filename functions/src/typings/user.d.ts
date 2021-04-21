@@ -1,15 +1,14 @@
 // User model:
 
-export interface IUserResult {
+export interface IUserNote{
+  id: NonNullable<string>,
+  name: string,
+  date: string,
 }
 
 export interface IUserSession {
   id: NonNullable<string>,
-  userRange: Number,
-  asanaQuantity: Number,
-  date: string,
-  duration: Number,
-  cal: Number,
+  date: string
 }
 
 export interface IUserOnboarding {
@@ -30,22 +29,11 @@ export interface IUserModel {
   name: string,
   levels: IUserLevels,
   onboardingComplete: IUserOnboarding,
-  recentResults: IUserResult[],
+  recentActivities: string[],
+  recentNotes: IUserNote[],
   sessions: IUserSession[]
 }
 
-// User model actions
-
 export interface IUserModelUpdates {
-  [key: string]: NonNullable<string> | string | IUserLevels | IUserOnboarding | IUserResult[] | IUserSession[]
-}
-
-export interface IUserModelLinkedUpdates {
-  id: string,
-  updates: IUserModelUpdates | IUserResultUpdates
-}
-
-export interface IUserResultUpdates extends IUserModelUpdates {
-  recentResults: IUserResult[],
-  levels: IUserLevels
+  [key: string]: NonNullable<string> | string | IUserLevels | IUserOnboarding | IUserNote[] | IUserSession[]
 }

@@ -1,19 +1,18 @@
 import * as admin from 'firebase-admin';
-import { ContentRepository } from '../typings';
+import { ContentRepository, IUserLevels } from '../typings';
 
 export class ContentDataRepository implements ContentRepository {
-  tagCollection: FirebaseFirestore.CollectionReference;
-  feedCollection: FirebaseFirestore.CollectionReference;
-  mediaCollection: FirebaseFirestore.CollectionReference;
+  collection: FirebaseFirestore.CollectionReference;
   
   constructor() {
-    this.tagCollection = admin.firestore().collection('asanas');
-    this.feedCollection = admin.firestore().collection('asanas');
-    this.mediaCollection = admin.firestore().collection('asanas');
+    this.collection = admin.firestore().collection('content');
   }
 
-  getTags() {
-    return Promise.resolve();
+  async getTags() {
+    const tagsObj = await this.collection.doc('tags').get();
+    return Object
+      .values(tagsObj.data())
+      .reduce((list, item) => list = [...list, ...item], []);
   }
 
   getFeed() {

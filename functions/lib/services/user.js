@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const user_1 = require("../repositories/user");
+const utils_1 = require("../utils");
 const router = express.Router();
 router.get('/:id', async (req, res, next) => {
     const id = req.params.id;
@@ -17,7 +18,7 @@ router.get('/:id', async (req, res, next) => {
 });
 router.post('/create', async (req, res, next) => {
     const id = req.body.id;
-    const model = createUserModel(id);
+    const model = utils_1.createUserModel(id);
     const repository = new user_1.UserDataRepository();
     try {
         await repository.setUserModel(id, model);
@@ -29,11 +30,10 @@ router.post('/create', async (req, res, next) => {
     next();
 });
 router.post('/update', async (req, res, next) => {
-    const id = req.params.id;
-    const model = createUserModel(id);
+    const { id, updates } = req.body;
     const repository = new user_1.UserDataRepository();
     try {
-        await repository.setUserModel(id, model);
+        await repository.updateUserModel(id, updates);
         res.status(200).send();
     }
     catch (error) {
@@ -41,24 +41,5 @@ router.post('/update', async (req, res, next) => {
     }
     next();
 });
-const createUserModel = (id) => {
-    return {
-        id,
-        name: null,
-        levels: {
-            standing: 1,
-            sitting: 1,
-            balances: 1,
-            lying_forward: 1,
-            lying_back: 1
-        },
-        onboardingComplete: {
-            concept: false,
-            player: false
-        },
-        recentResults: [],
-        sessions: []
-    };
-};
 exports.default = router;
 //# sourceMappingURL=user.js.map

@@ -9,15 +9,10 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserDataRepository = void 0;
 const admin = require("firebase-admin");
-const constants_1 = require("../utils/constants");
 class UserDataRepository {
     constructor() {
-        this.db = admin.firestore();
-        this.collection = this.db.collection(constants_1.USERS_COLLECTION_NAME);
+        this.collection = admin.firestore().collection('users');
     }
-    /**
-     * User methods
-     */
     async getUserModel(id) {
         const userSnapshot = await this.collection.doc(id).get();
         if (!userSnapshot.exists)
@@ -26,7 +21,6 @@ class UserDataRepository {
     }
     ;
     async setUserModel(id, data) {
-        console.log(id, data);
         return this.collection.doc(id).set(data);
     }
     async updateUserModel(id, updates) {
@@ -36,37 +30,28 @@ class UserDataRepository {
         if (!instance.exists)
             throw new Error("User doesnt exist");
         try {
-            try {
-                for (var _b = __asyncValues(Object.entries(updates)), _c; _c = await _b.next(), !_c.done;) {
-                    const [key, value] = _c.value;
+            for (var _b = __asyncValues(Object.entries(updates)), _c; _c = await _b.next(), !_c.done;) {
+                const [key, value] = _c.value;
+                if (typeof value === 'object') {
                     const basicObject = instance.data()[`${key}`];
-                    if (typeof value === 'object' && !Array.isArray(value)) {
-                        const merged = Object.assign(Object.assign({}, basicObject), value);
-                        await userRef.update({ [`${key}`]: merged });
-                    }
-                    else if (typeof value === 'object' && Array.isArray(value)) {
-                        const merged = [...basicObject, ...value];
-                        await userRef.update({ [`${key}`]: merged });
-                    }
-                    else {
-                        await userRef.update({ [`${key}`]: value });
-                    }
+                    const merged = Array.isArray(value) ? [...basicObject, ...value] : Object.assign(Object.assign({}, basicObject), value);
+                    await userRef.update({ [`${key}`]: merged });
+                }
+                else {
+                    await userRef.update({ [`${key}`]: value });
                 }
             }
-            catch (e_1_1) { e_1 = { error: e_1_1 }; }
-            finally {
-                try {
-                    if (_c && !_c.done && (_a = _b.return)) await _a.call(_b);
-                }
-                finally { if (e_1) throw e_1.error; }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (_c && !_c.done && (_a = _b.return)) await _a.call(_b);
             }
-            ;
-            return Promise.resolve();
+            finally { if (e_1) throw e_1.error; }
         }
-        catch (error) {
-            return Promise.reject(error);
-        }
+        ;
     }
 }
 exports.UserDataRepository = UserDataRepository;
+;
 //# sourceMappingURL=user.js.map

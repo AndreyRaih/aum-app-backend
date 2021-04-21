@@ -20,7 +20,8 @@ export const createUserModel = (id: string): IUserModel => {
       concept: false,
       player: false
     },
-    recentResults: [],
+    recentActivities: [],
+    recentNotes: [],
     sessions: []
   };
 };

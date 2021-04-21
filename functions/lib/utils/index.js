@@ -1,31 +1,28 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buildResultObject = exports.formatDateToString = void 0;
+exports.createUserModel = exports.formatDateToString = void 0;
 function formatDateToString(date) {
     const normalizeValue = (value) => value > 9 ? value.toString() : `0${value}`;
     return `${date.getFullYear()}-${normalizeValue(date.getMonth())}-${normalizeValue(date.getDate())}`;
 }
 exports.formatDateToString = formatDateToString;
-function buildResultObject(user, estimation) {
-    const { recentResults: existRecentResults, levels: existLevels } = user;
-    const { name, block, result } = estimation;
-    // Build level updates
-    const updatedBlockName = Object.keys(existLevels).find(level => block.includes(level));
-    const isShouldUpdate = result.every(chain => chain.isDone);
-    const levels = Object.assign(Object.assign({}, existLevels), { [updatedBlockName]: isShouldUpdate ? existLevels[updatedBlockName] + 1 : existLevels[updatedBlockName] });
-    // Build recent results updates
-    const newResult = {
-        asana: name,
-        block: block,
-        doneEntries: result.filter(entry => entry.isDone),
-        failures: result.filter(entry => !entry.isDone)
-    };
-    const recentResults = [...existRecentResults];
-    recentResults.push(newResult);
+exports.createUserModel = (id) => {
     return {
-        recentResults,
-        levels
+        id,
+        name: null,
+        levels: {
+            standing: 1,
+            sitting: 1,
+            balances: 1,
+            lying_forward: 1,
+            lying_back: 1
+        },
+        onboardingComplete: {
+            concept: false,
+            player: false
+        },
+        recentNotes: [],
+        sessions: []
     };
-}
-exports.buildResultObject = buildResultObject;
+};
 //# sourceMappingURL=index.js.map

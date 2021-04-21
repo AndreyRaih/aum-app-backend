@@ -1,4 +1,4 @@
-import { IUserModelUpdates, IUserModel } from "./user";
+import { IUserModelUpdates, IUserModel, IUserLevels } from "./user";
 
 export type UserRepository = {
   collection: FirebaseFirestore.CollectionReference;
@@ -8,17 +8,14 @@ export type UserRepository = {
 }
 
 export type ContentRepository = {
-  tagCollection: FirebaseFirestore.CollectionReference;
-  feedCollection: FirebaseFirestore.CollectionReference;
-  mediaCollection: FirebaseFirestore.CollectionReference;
-  getTags: () => Promise<any>;
+  collection: FirebaseFirestore.CollectionReference;
+  getTags: () => Promise<string[]>;
   getFeed: () => Promise<any>;
   getMediaByFeedItem: () => Promise<any>;
 }
 
 export type ProgressRepository = {
-  historyCollection: FirebaseFirestore.CollectionReference;
-  statisticCollection: FirebaseFirestore.CollectionReference;
+  collection: FirebaseFirestore.CollectionReference;
   getHistory: () => Promise<any>;
   getStatistic: () => Promise<any>;
 }
