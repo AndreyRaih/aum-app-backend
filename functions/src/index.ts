@@ -1,18 +1,4 @@
-/**
- * Copyright 2017 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/*
 'use strict';
 
 import * as functions from 'firebase-functions';
@@ -31,21 +17,11 @@ import {
 } from './handlers';
 import { AumApiHandlers, AumFirebase, IUserModelLinkedUpdates, IUserModelUpdates } from './typings';
 
-/**
- * Firestorage riggers;
- */
-
 export const create_user = functions.auth.user().onCreate(({ uid: id }: admin.auth.UserRecord) => create_user_model(id));
 
-/**
- * API handlers for REST API layer
- */
 
 // USER:
 
-/**
- * @description `GET` method
- */
 export const get_user = functions.https.onRequest(async (req, res) => {
   try {
     const { id } = req.query;
@@ -60,9 +36,6 @@ export const get_user = functions.https.onRequest(async (req, res) => {
   }
 });
 
-/**
- * @description `POST` method
- */
 export const update_user = functions.https.onRequest(async (req, res) => {
   try {
     const { id, updates } = req.body as AumApiHandlers.IUpdateUser;
@@ -77,9 +50,6 @@ export const update_user = functions.https.onRequest(async (req, res) => {
   }
 });
 
-/**
- * @description `POST` method
- */
 export const apply_asana_estimations = functions.https.onRequest(async (req, res) => {
   try {
     const estimation = req.body as AumApiHandlers.IApplyAsanaEstimations;
@@ -97,9 +67,6 @@ export const apply_asana_estimations = functions.https.onRequest(async (req, res
 
 // CONTENT:
 
-/**
- * @description `GET` method
- */
 export const get_practice_preview = functions.https.onRequest(async (req, res) => {
   try {
     const { id } = req.query;
@@ -114,9 +81,6 @@ export const get_practice_preview = functions.https.onRequest(async (req, res) =
   }
 });
 
-/**
- * @description `POST` method
- */
 export const get_asana_queue = functions.https.onRequest(async (req, res) => {
   try {
     const { blocks } = req.body as AumApiHandlers.IGetAsanaQueue;
@@ -131,9 +95,6 @@ export const get_asana_queue = functions.https.onRequest(async (req, res) => {
   }
 });
 
-/**
- * @description `POST` method
- */
 export const add_session_result = functions.https.onRequest(async (req, res) => {
   try {
     const { id, session } = req.body as AumApiHandlers.IAddSessionResult;
@@ -151,9 +112,6 @@ export const add_session_result = functions.https.onRequest(async (req, res) => 
 
 // OTHER
 
-/**
- * @description `GET` method
- */
 export const get_fact = functions.https.onRequest(async (req, res) => {
   try {
     const fact = await create_fun_fact();
@@ -163,3 +121,40 @@ export const get_fact = functions.https.onRequest(async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+*/
+
+/*
+ * Copyright 2017 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+'use strict';
+
+import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
+import * as express from 'express';
+
+import services from './services';
+
+import { errorMiddleware } from './middlewares';
+
+const app = express();
+admin.initializeApp()
+
+app.use(errorMiddleware);
+app.use('/api', services);
+
+
+exports.app = functions.https.onRequest(app);

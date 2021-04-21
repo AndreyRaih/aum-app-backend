@@ -1,4 +1,129 @@
-/**
+/*
+'use strict';
+
+import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
+admin.initializeApp()
+
+import {
+  build_queue,
+  create_user_model,
+  get_user_model,
+  update_user_model,
+  practice_preview,
+  add_session,
+  create_fun_fact,
+  parse_results_for_updates
+} from './handlers';
+import { AumApiHandlers, AumFirebase, IUserModelLinkedUpdates, IUserModelUpdates } from './typings';
+
+export const create_user = functions.auth.user().onCreate(({ uid: id }: admin.auth.UserRecord) => create_user_model(id));
+
+
+// USER:
+
+export const get_user = functions.https.onRequest(async (req, res) => {
+  try {
+    const { id } = req.query;
+    if (!id) {
+      res.status(400).send(new Error('Invalid request. User ID is required'));
+    }
+    const result = await get_user_model(id as string);
+    res.status(200).json(result);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+export const update_user = functions.https.onRequest(async (req, res) => {
+  try {
+    const { id, updates } = req.body as AumApiHandlers.IUpdateUser;
+    if (!id) {
+      res.status(400).send(new Error('Invalid request. User ID is required'));
+    }
+    await update_user_model(id, updates);
+    res.status(200).send('OK');
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+export const apply_asana_estimations = functions.https.onRequest(async (req, res) => {
+  try {
+    const estimation = req.body as AumApiHandlers.IApplyAsanaEstimations;
+    if (!estimation.id) {
+      res.status(400).send(new Error('Invalid request. User ID is required'));
+    }
+    const { id, updates }: IUserModelLinkedUpdates = await parse_results_for_updates(estimation);
+    await update_user_model(id, updates);
+    res.status(200).send('OK');
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+// CONTENT:
+
+export const get_practice_preview = functions.https.onRequest(async (req, res) => {
+  try {
+    const { id } = req.query;
+    if (!id) {
+      res.status(400).send(new Error('Invalid request. User ID is required'));
+    }
+    const preview = await practice_preview(id as string);
+    res.status(200).json(preview);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+export const get_asana_queue = functions.https.onRequest(async (req, res) => {
+  try {
+    const { blocks } = req.body as AumApiHandlers.IGetAsanaQueue;
+    if (!blocks) {
+      res.status(400).send(new Error('Invalid request. Blocks is required'));
+    }
+    const queue: AumFirebase.AsanaBlockItem[] = await build_queue(blocks);
+    res.status(200).json(queue);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+export const add_session_result = functions.https.onRequest(async (req, res) => {
+  try {
+    const { id, session } = req.body as AumApiHandlers.IAddSessionResult;
+    if (!id) {
+      res.status(400).send(new Error('Invalid request. User ID is required'));
+    }
+    const updates: IUserModelUpdates = await add_session(id, session);
+    await update_user_model(id, updates);
+    res.status(200).send('OK');
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+// OTHER
+
+export const get_fact = functions.https.onRequest(async (req, res) => {
+  try {
+    const fact = await create_fun_fact();
+    res.status(200).send(fact);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+*/
+/*
  * Copyright 2017 Google Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,136 +140,14 @@
  */
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get_fact = exports.add_session_result = exports.get_asana_queue = exports.get_practice_preview = exports.apply_asana_estimations = exports.update_user = exports.get_user = exports.create_user = void 0;
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
+const express = require("express");
+const services_1 = require("./services");
+const middlewares_1 = require("./middlewares");
+const app = express();
 admin.initializeApp();
-const handlers_1 = require("./handlers");
-/**
- * Firestorage riggers;
- */
-exports.create_user = functions.auth.user().onCreate(({ uid: id }) => handlers_1.create_user_model(id));
-/**
- * API handlers for REST API layer
- */
-// USER:
-/**
- * @description `GET` method
- */
-exports.get_user = functions.https.onRequest(async (req, res) => {
-    try {
-        const { id } = req.query;
-        if (!id) {
-            res.status(400).send(new Error('Invalid request. User ID is required'));
-        }
-        const result = await handlers_1.get_user_model(id);
-        res.status(200).json(result);
-    }
-    catch (err) {
-        console.log(err);
-        res.status(500).json(err);
-    }
-});
-/**
- * @description `POST` method
- */
-exports.update_user = functions.https.onRequest(async (req, res) => {
-    try {
-        const { id, updates } = req.body;
-        if (!id) {
-            res.status(400).send(new Error('Invalid request. User ID is required'));
-        }
-        await handlers_1.update_user_model(id, updates);
-        res.status(200).send('OK');
-    }
-    catch (err) {
-        console.log(err);
-        res.status(500).json(err);
-    }
-});
-/**
- * @description `POST` method
- */
-exports.apply_asana_estimations = functions.https.onRequest(async (req, res) => {
-    try {
-        const estimation = req.body;
-        if (!estimation.id) {
-            res.status(400).send(new Error('Invalid request. User ID is required'));
-        }
-        const { id, updates } = await handlers_1.parse_results_for_updates(estimation);
-        await handlers_1.update_user_model(id, updates);
-        res.status(200).send('OK');
-    }
-    catch (err) {
-        console.log(err);
-        res.status(500).json(err);
-    }
-});
-// CONTENT:
-/**
- * @description `GET` method
- */
-exports.get_practice_preview = functions.https.onRequest(async (req, res) => {
-    try {
-        const { id } = req.query;
-        if (!id) {
-            res.status(400).send(new Error('Invalid request. User ID is required'));
-        }
-        const preview = await handlers_1.practice_preview(id);
-        res.status(200).json(preview);
-    }
-    catch (err) {
-        console.log(err);
-        res.status(500).json(err);
-    }
-});
-/**
- * @description `POST` method
- */
-exports.get_asana_queue = functions.https.onRequest(async (req, res) => {
-    try {
-        const { blocks } = req.body;
-        if (!blocks) {
-            res.status(400).send(new Error('Invalid request. Blocks is required'));
-        }
-        const queue = await handlers_1.build_queue(blocks);
-        res.status(200).json(queue);
-    }
-    catch (err) {
-        console.log(err);
-        res.status(500).json(err);
-    }
-});
-/**
- * @description `POST` method
- */
-exports.add_session_result = functions.https.onRequest(async (req, res) => {
-    try {
-        const { id, session } = req.body;
-        if (!id) {
-            res.status(400).send(new Error('Invalid request. User ID is required'));
-        }
-        const updates = await handlers_1.add_session(id, session);
-        await handlers_1.update_user_model(id, updates);
-        res.status(200).send('OK');
-    }
-    catch (err) {
-        console.log(err);
-        res.status(500).json(err);
-    }
-});
-// OTHER
-/**
- * @description `GET` method
- */
-exports.get_fact = functions.https.onRequest(async (req, res) => {
-    try {
-        const fact = await handlers_1.create_fun_fact();
-        res.status(200).send(fact);
-    }
-    catch (err) {
-        console.log(err);
-        res.status(500).json(err);
-    }
-});
+app.use(middlewares_1.errorMiddleware);
+app.use('/api', services_1.default);
+exports.app = functions.https.onRequest(app);
 //# sourceMappingURL=index.js.map

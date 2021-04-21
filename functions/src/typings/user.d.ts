@@ -1,12 +1,6 @@
-import { IEstimationItem } from "./content";
-
 // User model:
 
 export interface IUserResult {
-  asana: string,
-  block: string,
-  doneEntries: IEstimationItem[],
-  failures: IEstimationItem[]
 }
 
 export interface IUserSession {
@@ -31,7 +25,7 @@ export interface IUserLevels {
   lying_back: Number
 }
 
-export type UserModel = {
+export interface IUserModel {
   id: NonNullable<string>,
   name: string,
   levels: IUserLevels,

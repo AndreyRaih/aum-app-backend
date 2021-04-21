@@ -1,25 +1,24 @@
-import { AsanaItem } from "./content";
-import { IUserModelUpdates, UserModel } from "./user";
+import { IUserModelUpdates, IUserModel } from "./user";
 
-declare namespace AumFirebase {
-  export type AsanaBlockQuery = {
-    id: string,
-    block: string
-  }
-  
-  export type AsanaBlockItem = {
-    block: string,
-    value: AsanaItem[]
-  }
+export type UserRepository = {
+  collection: FirebaseFirestore.CollectionReference;
+  getUserModel: (id: string) => Promise<IUserModel>;
+  setUserModel: (id: string, data: IUserModel) => Promise<FirebaseFirestore.WriteResult>;
+  updateUserModel: (id: string, updates: IUserModelUpdates) => Promise<void>;
 }
 
-export type AumRepository = {
-  db: FirebaseFirestore.Firestore,
-  asanasCollection: FirebaseFirestore.CollectionReference;
-  usersCollection: FirebaseFirestore.CollectionReference;
-  getAsanaList: (block: string[]) => Promise<AumFirebase.AsanaBlockItem[]>;
-  getAsana: (query: AumFirebase.AsanaBlockQuery) => Promise<AumFirebase.AsanaBlockItem>;
-  getUserModel: (id: string) => Promise<UserModel>;
-  setUserModel: (id: string, data: UserModel) => Promise<FirebaseFirestore.WriteResult>;
-  updateUserModel: (id: string, updates: IUserModelUpdates) => Promise<void>;
+export type ContentRepository = {
+  tagCollection: FirebaseFirestore.CollectionReference;
+  feedCollection: FirebaseFirestore.CollectionReference;
+  mediaCollection: FirebaseFirestore.CollectionReference;
+  getTags: () => Promise<any>;
+  getFeed: () => Promise<any>;
+  getMediaByFeedItem: () => Promise<any>;
+}
+
+export type ProgressRepository = {
+  historyCollection: FirebaseFirestore.CollectionReference;
+  statisticCollection: FirebaseFirestore.CollectionReference;
+  getHistory: () => Promise<any>;
+  getStatistic: () => Promise<any>;
 }

@@ -4,7 +4,7 @@ exports.updateUserModel = exports.getUserModel = exports.createUserModel = void 
 const firebase_repository_1 = require("../../firebase-repository");
 const repository = new firebase_repository_1.AumFirebaseRepository();
 exports.createUserModel = (id) => {
-    const data = {
+    return {
         id,
         name: null,
         levels: {
@@ -21,7 +21,7 @@ exports.createUserModel = (id) => {
         recentResults: [],
         sessions: []
     };
-    return repository.setUserModel(id, data);
+    // return repository.setUserModel(id, data);
 };
 exports.getUserModel = (id) => repository.getUserModel(id);
 exports.updateUserModel = (id, updates) => repository.updateUserModel(id, updates);
